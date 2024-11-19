@@ -1,0 +1,9 @@
+div.search-input-div > input.MuiInputBase-input {
+    padding-top: 5.5px;
+    padding-bottom: 5.5px;
+}
+
+.filter-icon-buttom {
+    color: var(--primary-color) !important;
+    color: red;
+}

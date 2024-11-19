@@ -1,0 +1,22 @@
+img.logo-login-form {
+    width: 272px;
+    margin-bottom: 30px
+}
+
+.login-form-label {
+    font-size: 16px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.login-form-input {
+    margin-top: 0px !important;
+}
+
+Button.login-form-submit-button {
+    color: white;
+    font-weight: bold;
+    font-size: 22px;
+    height: 53px;
+    margin-top: 10px
+}

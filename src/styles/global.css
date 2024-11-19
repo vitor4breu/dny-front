@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', 'Centhury Gotic', sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: 'Poppins', 'Centhury Gotic', sans-serif;
+  }
+
+@font-face {
+  font-family: 'Centhury Gotic';
+  src: local('Centhury Gotic'), url(../assets/fonts/CenturyGothic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: local('Poppins'), url(../assets/fonts/Poppins.ttf) format('truetype');
+}
+
+:root {
+  --primary-color: #FACE83;
+}
