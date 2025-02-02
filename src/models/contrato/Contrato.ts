@@ -4,4 +4,5 @@ export type ContratoModel = {
     escola : string;
     cidade : string;
     uf : string;
+    status : string;
 };

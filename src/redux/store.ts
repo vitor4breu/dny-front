@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './slices/userSlice';
-import contractReducer from './slices/contractSlice';
+import contractReducer from './slices/contratoSlice';
 import productionReducer from './slices/productionSlice';
 import additionalReducer from './slices/additionalSlice';
 import canecasReducer from './slices/canecasSlice';

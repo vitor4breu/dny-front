@@ -1,0 +1,21 @@
+img.logo-login-form {
+    width: 272px;
+    margin-bottom: 30px
+}
+
+.login-form-label {
+    font-size: 16px;
+    padding-top: 5px;
+    padding-bottom: 2px;
+}
+
+.login-form-input {
+    margin-bottom: 5px !important;
+}
+
+Button.login-form-button {
+    font-weight: bold;
+    font-size: 22px;
+    height: 53px;
+    margin-top: 10px
+}
