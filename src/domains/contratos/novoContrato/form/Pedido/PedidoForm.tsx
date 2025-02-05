@@ -1,256 +1,317 @@
-import React from "react";
-import Box from "@components/@extended/Box";
+import React, { useEffect } from "react";
+
 import {
   Box as MuiBox,
   Grid,
   Typography,
-  FormControlLabel,
-  Switch,
-  Tooltip,
   Select,
   MenuItem,
+  Button,
+  TextField,
+  Divider,
+  FormControl,
 } from "@mui/material";
-import { DetalhesPedido } from "../../types";
-import useFormStore from "../formStore";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import { useForm } from "react-hook-form";
+import { useShallow } from "zustand/react/shallow";
 
-const DetalhesPedidoForm: React.FC = () => {
+import Box from "@components/@extended/Box";
+import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
+import useFormStore from "../formStore";
+import useNewFormStore from "../newFormStore";
+import ContratosService from "services/contratoService";
+import { formInitalState } from "../../types/formTypes";
+import { HOODIE_GENDER, UNIFORM_GENDER, UNIFORM_SIZES } from "@utils/consts";
+
+interface IProps {
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const DetalhesPedidoForm = ({ setModal }: IProps) => {
   const setDetalhesPedido = useFormStore((state) => state.setDetalhesPedido);
   const detalhesPedido = useFormStore((state) => state.detalhesPedido);
   const coresCamisa = useFormStore((state) => state.coresCamisa);
   const coresMoletom = useFormStore((state) => state.coresMoletom);
 
-  const handleChange =
-    (field: keyof DetalhesPedido) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDetalhesPedido({
-        ...detalhesPedido,
-        [field]: event.target.checked,
-      });
-    };
+  const addAluno = useNewFormStore((state) => state.addAluno);
 
-  const getDisabledTooltip = (field: string) => {
-    switch (field) {
-      case "strap":
-        return "O tirante só está disponível quando a caneca está selecionada";
-      case "nomePersonalizado":
-        return "O nome personalizado só está disponível quando camiseta ou moletom estão selecionados";
-      case "hoodieSignature":
-        return "A assinatura no capuz só está disponível quando o moletom está selecionado";
-      default:
-        return "";
-    }
+  const setCoresMoletom = useFormStore(
+    useShallow((state) => state.setCoresMoletom)
+  );
+  const setCoresCamisa = useFormStore(
+    useShallow((state) => state.setCoresCamisa)
+  );
+
+  useEffect(() => {
+    ContratosService.ObterCoresCamisa().then(setCoresCamisa);
+    ContratosService.ObterCoresMoletom().then(setCoresMoletom);
+  }, []);
+
+  const { register, handleSubmit, setValue, watch, control } = useForm({
+    defaultValues: formInitalState,
+  });
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+    if (data.nomeAluno.trim() === "") return;
+
+    addAluno({ nome: data.nomeAluno, sexo: data.sexo });
+    setModal(true);
+
+    setValue("nomeAluno", "");
   };
 
-  const FormControlWithTooltip = ({
-    control,
-    label,
-    disabled,
-    tooltipField,
-  }: {
-    control: React.ReactElement;
-    label: string;
-    disabled?: boolean;
-    tooltipField?: string;
-  }) => (
-    <Tooltip
-      title={disabled && tooltipField ? getDisabledTooltip(tooltipField) : ""}
-      placement="top"
-      arrow
-    >
-      <span>
-        <FormControlLabel control={control} label={label} disabled={disabled} />
-      </span>
-    </Tooltip>
-  );
+  const possuiCamiseta = watch("possuiCamiseta");
+  const possuiMoletom = watch("possuiMoletom");
+  const possuiCaneca = watch("possuiCaneca");
 
   return (
     <Box
-      title="Informações do pedido"
+      title="Assistente de preenchimento rápido"
       titleProps={{ variant: "subtitle1", fontFamily: "inter" }}
       sx={{ mb: 2 }}
     >
-      <Grid container spacing={2}>
-        {/* Camiseta */}
-        <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
-            Camiseta
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={detalhesPedido.possuiCamiseta}
-                    onChange={handleChange("possuiCamiseta")}
-                    color="primary"
-                  />
-                }
-                label="Camiseta"
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Select
-                fullWidth
-                size="small"
-                // value={aluno.camisa?.idCor || ''}
-                // onChange={(e) => updateAluno(index, 'camisa', { ...aluno.camisa, cor: e.target.value })}
-                displayEmpty
-                sx={{ alignItems: "center" }}
-              >
-                <MenuItem value="" disabled>
-                  <em>Selecione a cor</em>
-                </MenuItem>
-                {coresCamisa.map((color) => (
-                  <MenuItem key={color.id} value={color.id}>
-                    <MuiBox
-                      sx={{
-                        display: "inline-block",
-                        width: 16,
-                        height: 16,
-                        borderRadius: "50%",
-                        backgroundColor: color.hex,
-                        marginRight: 1,
-                      }}
-                    />
-                    {color.nome}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-          </Grid>
-        </Grid>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          {/* Coluna 1 - Camiseta */}
+          <Grid item md={12} lg={3.8}>
+            <Typography variant="h6">
+              Camiseta{" "}
+              <ControlledSwitch name="possuiCamiseta" control={control} />
+            </Typography>
 
-        {/* Moletom */}
-        <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
-            Moletom
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={detalhesPedido.possuiMoletom}
-                    onChange={handleChange("possuiMoletom")}
-                    color="primary"
-                  />
-                }
-                label="Moletom"
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <Select
-                fullWidth
-                size="small"
-                // value={aluno.moletom?.idCor || ""}
-                // onChange={(e) =>
-                //   updateAluno(index, "moletom", {
-                //     ...aluno.moletom,
-                //     cor: e.target.value,
-                //   })
-                // }
-                displayEmpty
-              >
-                <MenuItem value="" disabled>
-                  <em>Selecione a cor</em>
-                </MenuItem>
-                {coresMoletom.map((color) => (
-                  <MenuItem
-                    key={color.id}
-                    value={color.id}
-                    sx={{ display: "flex", alignItems: "center" }}
+            {possuiCamiseta && (
+              <>
+                <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+                  <Select
+                    {...register("modeloCamiseta")} // Registro do campo
+                    fullWidth
+                    size="small"
+                    defaultValue=""
+                    displayEmpty
                   >
-                    <MuiBox
-                      sx={{
-                        display: "inline-block",
-                        width: 16,
-                        height: 16,
-                        borderRadius: "50%",
-                        backgroundColor: color.hex,
-                        marginRight: 1,
-                      }}
-                    />
-                    {color.nome}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
+                    <MenuItem value="" disabled>
+                      <em>Selecione o modelo</em>
+                    </MenuItem>
+                    {UNIFORM_GENDER.map((gender) => (
+                      <MenuItem key={gender.value} value={gender.value}>
+                        {gender.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+                  <Select
+                    {...register("tamanhoCamiseta")}
+                    fullWidth
+                    size="small"
+                    defaultValue=""
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      <em>Selecione o tamanho</em>
+                    </MenuItem>
+                    {UNIFORM_SIZES.map((size) => (
+                      <MenuItem key={size.value} value={size.value}>
+                        {size.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+                  <Select
+                    {...register("corCamiseta")}
+                    fullWidth
+                    size="small"
+                    defaultValue=""
+                    displayEmpty
+                    sx={{ alignItems: "center" }}
+                  >
+                    <MenuItem value="" disabled>
+                      <em>Selecione a cor</em>
+                    </MenuItem>
+                    {coresCamisa.map((color) => (
+                      <MenuItem key={color.id} value={color.id}>
+                        <MuiBox
+                          sx={{
+                            display: "inline-block",
+                            width: 16,
+                            height: 16,
+                            borderRadius: "50%",
+                            backgroundColor: color.hex,
+                            marginRight: 1,
+                          }}
+                        />
+                        {color.nome}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </>
+            )}
           </Grid>
-          <Grid item xs={6}>
-            <FormControlWithTooltip
-              control={
-                <Switch
-                  checked={detalhesPedido.possuiAssinaturaCapuzMoletom}
-                  onChange={handleChange("possuiAssinaturaCapuzMoletom")}
-                  disabled={!detalhesPedido.possuiMoletom}
-                  color="primary"
-                />
-              }
-              label="Assinatura no capuz"
-              disabled={!detalhesPedido.possuiMoletom}
-              tooltipField="hoodieSignature"
+
+          {/* Divider */}
+          <Grid item md={12} lg={0.2}>
+            <Divider
+              orientation="vertical"
+              sx={{ height: "100%", display: { xs: "none", lg: "block" } }}
             />
           </Grid>
-        </Grid>
 
-        {/* Caneca */}
-        <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
-            Acessórios
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={detalhesPedido.possuiCaneca}
-                    onChange={handleChange("possuiCaneca")}
-                    color="primary"
-                  />
-                }
-                label="Caneca"
+          {/* Coluna 2 - Moletom */}
+          <Grid item md={12} lg={3.8}>
+            <Typography variant="h6">
+              Moletom{" "}
+              <ControlledSwitch name="possuiMoletom" control={control} />
+            </Typography>
+
+            {possuiMoletom && (
+              <>
+                <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+                  <Select
+                    {...register("modeloMoletom")}
+                    fullWidth
+                    size="small"
+                    defaultValue=""
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      <em>Selecione o modelo</em>
+                    </MenuItem>
+                    {HOODIE_GENDER.map((gender) => (
+                      <MenuItem key={gender.value} value={gender.value}>
+                        {gender.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+                  <Select
+                    {...register("tamanhoMoletom")}
+                    fullWidth
+                    size="small"
+                    defaultValue=""
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      <em>Selecione o tamanho</em>
+                    </MenuItem>
+                    {UNIFORM_SIZES.map((size) => (
+                      <MenuItem key={size.value} value={size.value}>
+                        {size.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+                  <Select
+                    {...register("corMoletom")}
+                    fullWidth
+                    size="small"
+                    defaultValue=""
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      <em>Selecione a cor</em>
+                    </MenuItem>
+                    {coresMoletom.map((color) => (
+                      <MenuItem
+                        key={color.id}
+                        value={color.id}
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        <MuiBox
+                          sx={{
+                            display: "inline-block",
+                            width: 16,
+                            height: 16,
+                            borderRadius: "50%",
+                            backgroundColor: color.hex,
+                            marginRight: 1,
+                          }}
+                        />
+                        {color.nome}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <ControlledSwitch
+                  name="possuiAssinaturaMoletom"
+                  control={control}
+                  label="Adicionar Assinatura"
+                />
+              </>
+            )}
+          </Grid>
+
+          {/* Divider */}
+          <Grid item md={12} lg={0.2}>
+            <Divider
+              orientation="vertical"
+              sx={{ height: "100%", display: { xs: "none", lg: "block" } }}
+            />
+          </Grid>
+
+          {/* Coluna 3 - Caneca */}
+          <Grid item md={12} lg={3.8}>
+            <Typography variant="h6">
+              Caneca <ControlledSwitch name="possuiCaneca" control={control} />
+            </Typography>
+
+            {possuiCaneca && (
+              <ControlledSwitch
+                name="possuiTiranteCaneca"
+                control={control}
+                label="Adicionar Tirante"
               />
-            </Grid>
-            <Grid item xs={6}>
-              <FormControlWithTooltip
-                control={
-                  <Switch
-                    checked={detalhesPedido.possuiTirante}
-                    onChange={handleChange("possuiTirante")}
-                    disabled={!detalhesPedido.possuiCaneca}
-                    color="primary"
-                  />
-                }
-                label="Tirante"
-                disabled={!detalhesPedido.possuiCaneca}
-                tooltipField="strap"
-              />
-            </Grid>
+            )}
+          </Grid>
+
+          <Grid item md={12} lg={8}>
+            <TextField
+              label="Nome do Aluno"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              {...register("nomeAluno")}
+            />
+          </Grid>
+
+          <Grid item md={6} lg={2}>
+            <FormControl size="small" sx={{ mt: 2 }}>
+              <Button
+                startIcon={<AddIcon />}
+                type="submit"
+                size="small"
+                variant="contained"
+                color="secondary"
+              >
+                Adicionar
+              </Button>
+            </FormControl>
+          </Grid>
+          <Grid item md={6} lg={2}>
+            <FormControl size="small" sx={{ mt: 2 }}>
+              <Button
+                startIcon={<EditIcon />}
+                type="submit"
+                size="small"
+                variant="contained"
+                color="primary"
+              >
+                Personalizar
+              </Button>
+            </FormControl>
           </Grid>
         </Grid>
-
-        {/* Bandeira */}
-        <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
-            Bandeira
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={detalhesPedido.possuiBandeira}
-                    onChange={handleChange("possuiBandeira")}
-                    color="primary"
-                  />
-                }
-                label="Bandeira"
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      </form>
     </Box>
   );
 };

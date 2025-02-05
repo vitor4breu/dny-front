@@ -1,12 +1,7 @@
-// CriarEditarContrato.tsx
-import React from "react";
 import { Grid } from "@mui/material";
-import RepresentanteForm from "./form/Representantes/RepresentantesForm";
-import DetalhesPedidoForm from "./form/Pedido/PedidoForm";
-import DeliveryForm from "./form/Envio/EnvioForm";
-import AlunosForm from "./form/Alunos/AlunosForm";
-import SubmitForm from "./form/Submit";
 import { ToastContainer } from "react-toastify";
+
+import SubmitForm from "./form/Submit";
 import HorizontalNonLinearStepper from "./Stepper";
 
 const CriarEditarContrato = () => {

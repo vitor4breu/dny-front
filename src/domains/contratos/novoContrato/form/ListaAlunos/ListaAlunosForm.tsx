@@ -2,114 +2,96 @@ import { useState } from "react";
 import Box from "@components/@extended/Box";
 import {
   Button,
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
+  CardContent,
+  Typography,
+  Card,
+  CardHeader,
+  Modal,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import useNewFormStore from "../newFormStore";
+import DetalhesPedidoForm from "../Pedido/PedidoForm";
+import AlunoInput from "../Alunos/components/AlunoInput";
 
 const ListaAlunosForm = () => {
-  const [nomeAluno, setNomeAluno] = useState<string>("");
-  const [sexo, setSexo] = useState<"M" | "F">("M");
+  const pedido = useNewFormStore((state) => state.pedido);
+  const [modal, setModal] = useState(false);
 
   // Zustand store
   const alunos = useNewFormStore((state) => state.alunos);
-  const addAluno = useNewFormStore((state) => state.addAluno);
-
-  // Alternar seleção de gênero
-  const handleSexoChange = (selectedSexo: "M" | "F") => {
-    setSexo(selectedSexo);
-  };
-
-  // Adicionar aluno à lista
-  const handleAddAluno = () => {
-    if (nomeAluno.trim() === "") return;
-    addAluno({ nome: nomeAluno, sexo });
-    setNomeAluno(""); // Resetar campo
-  };
 
   return (
-    <Box
-      title={`Quantidade de Alunos: ${alunos.length}`}
-      titleProps={{ variant: "subtitle1", fontFamily: "inter" }}
-    >
-      {/* Nome do aluno */}
-      <TextField
-        label="Nome do Aluno"
-        value={nomeAluno}
-        onChange={(e) => setNomeAluno(e.target.value)}
-        variant="outlined"
-        fullWidth
-        margin="normal"
-      />
+    <>
+      <DetalhesPedidoForm setModal={setModal} />
 
-      {/* Checkboxes para gênero */}
-      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={sexo === "M"}
-              onChange={() => handleSexoChange("M")}
-            />
-          }
-          label="Masculino"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={sexo === "F"}
-              onChange={() => handleSexoChange("F")}
-            />
-          }
-          label="Feminino"
-        />
-      </div>
-
-      {/* Botão de adicionar */}
-      <Button
-        startIcon={<AddIcon />}
-        onClick={handleAddAluno}
-        size="small"
-        variant="contained"
-        color="secondary"
+      <Box
+        title={`Quantidade de Alunos: ${alunos.length}`}
+        titleProps={{ variant: "subtitle1", fontFamily: "inter" }}
       >
-        Adicionar Aluno
-      </Button>
-
-      {/* Tabela de alunos adicionados */}
-      <TableContainer component={Paper} sx={{ mt: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <strong>Nome</strong>
-              </TableCell>
-              <TableCell>
-                <strong>Sexo</strong>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {alunos?.map((aluno, index) => (
-              <TableRow key={index}>
-                <TableCell>{aluno.nome}</TableCell>
-                <TableCell>
-                  {aluno.sexo === "M" ? "Masculino" : "Feminino"}
-                </TableCell>
-              </TableRow>
+        {/* Tabela de alunos adicionados */}
+        <>
+          <div
+            style={{
+              display: "grid",
+              gap: "16px",
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            }}
+          >
+            {alunos.map((aluno) => (
+              <Card sx={{ position: "relative", p: 2 }}>
+                <CardHeader
+                  title={aluno.nome}
+                  subheader={`Sexo: ${aluno.sexo}`}
+                  action={
+                    <Button
+                      size="small"
+                      startIcon={<EditIcon />}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => setModal(true)}
+                    >
+                      Editar
+                    </Button>
+                  }
+                />
+                <CardContent>
+                  <Typography variant="body2">
+                    Camiseta:{" "}
+                    {pedido.camisa.possui ? pedido.camisa.cor : "Não possui"}
+                  </Typography>
+                  <Typography variant="body2">
+                    Moletom:{" "}
+                    {pedido.moletom.possui ? pedido.moletom.cor : "Não possui"}
+                  </Typography>
+                  <Typography variant="body2">
+                    Caneca: {pedido.caneca.possui ? "Sim" : "Não"}{" "}
+                    {pedido.caneca.tirante ? "(com tirante)" : ""}
+                  </Typography>
+                  <Typography variant="body2">
+                    Bandeira: {pedido.bandeira.possui ? "Sim" : "Não"}
+                  </Typography>
+                </CardContent>
+              </Card>
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+          </div>
+          <Modal open={modal} onClose={() => setModal(false)}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                bgcolor: "background.paper",
+                p: 4,
+                borderRadius: 2,
+              }}
+            >
+              <AlunoInput key={1} index={1} />
+            </Box>
+          </Modal>
+        </>
+      </Box>
+    </>
   );
 };
 

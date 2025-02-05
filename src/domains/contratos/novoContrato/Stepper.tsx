@@ -1,23 +1,20 @@
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepButton from "@mui/material/StepButton";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
+
+import {
+  Box,
+  Stepper,
+  Step,
+  StepButton,
+  Button,
+  Typography,
+} from "@mui/material";
+
 import RepresentanteForm from "./form/Representantes/RepresentantesForm";
-import DeliveryForm from "./form/Envio/EnvioForm";
-import DetalhesPedidoForm from "./form/Pedido/PedidoForm";
-import AlunosForm from "./form/Alunos/AlunosForm";
 import ListaAlunosForm from "./form/ListaAlunos/ListaAlunosForm";
-import ListaPedidos from "./form/ListaPedidos/ListaPedidosForm";
 
 const stepComponents: Map<string, JSX.Element> = new Map([
-  ["Representantes", <RepresentanteForm />],
-  ["Pedido", <DetalhesPedidoForm />],
-  ["Quantidade", <ListaAlunosForm />],
-  ["Alunos", <ListaPedidos />],
-  ["Entrega", <DeliveryForm />],
+  ["Detalhes Pedido", <RepresentanteForm />],
+  ["Alunos", <ListaAlunosForm />],
 ]);
 
 export default function HorizontalNonLinearStepper() {
@@ -67,17 +64,12 @@ export default function HorizontalNonLinearStepper() {
     handleNext();
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
-  };
-
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper
         nonLinear
         activeStep={activeStep}
-        style={{ marginBottom: "20px" }}
+        style={{ marginBottom: "20px", width: "60%", justifySelf: "center" }}
       >
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>

@@ -20,3 +20,21 @@ export type PedidoForm = {
     possui: boolean;
   };
 };
+
+export const formInitalState = {
+  possuiCamiseta: true,
+  modeloCamiseta: "",
+  tamanhoCamiseta: "",
+  corCamiseta: "",
+  possuiMoletom: false,
+  modeloMoletom: "",
+  tamanhoMoletom: "",
+  corMoletom: "",
+  possuiAssinaturaMoletom: false,
+  possuiCaneca: false,
+  possuiTiranteCaneca: false,
+  nomeAluno: "",
+  nomePersonalizadoCamisa: "",
+  nomePersonalizadoMoletom: "",
+  nomePersonalizadoCaneca: "",
+};

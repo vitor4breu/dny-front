@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Box from "@components/@extended/Box";
 import {
   Grid,
@@ -7,34 +7,35 @@ import {
   RadioGroup,
   FormControlLabel,
   Select,
-  MenuItem
-} from '@mui/material';
-import ReactInputMask from 'react-input-mask';
-import { UF_LIST } from '@utils/consts';
-import { Endereco, TipoEnvio } from '../../types';
-import useFormStore from '../formStore';
+  MenuItem,
+} from "@mui/material";
+import ReactInputMask from "react-input-mask";
+import { UF_LIST } from "@utils/consts";
+import { Endereco, TipoEnvio } from "../../types";
+import useFormStore from "../formStore";
 
-const DeliveryForm: React.FC = () => {
-
+const DeliveryForm = () => {
   const detalhesEnvio = useFormStore((state) => state.detalhesEnvio);
   const setDetalhesEnvio = useFormStore((state) => state.setDetalhesEnvio);
   const updateEndereco = useFormStore((state) => state.updateEndereco);
 
   const onUpdateCep = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const numericValue = e.target.value.replace(/\D/g, '');
-    setDetalhesEnvio({...detalhesEnvio, endereco: {...detalhesEnvio.endereco, cep: numericValue}});
+    const numericValue = e.target.value.replace(/\D/g, "");
+    setDetalhesEnvio({
+      ...detalhesEnvio,
+      endereco: { ...detalhesEnvio.endereco, cep: numericValue },
+    });
     //updateEndereco('cep', numericValue);
     if (numericValue.length === 8) {
       fetchEndereco(numericValue);
     }
-  }
-
+  };
 
   const fetchEndereco = async (cep: string) => {
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
-      
+
       if (!data.erro) {
         setDetalhesEnvio({
           ...detalhesEnvio,
@@ -43,31 +44,40 @@ const DeliveryForm: React.FC = () => {
             rua: data.logradouro,
             bairro: data.bairro,
             cidade: data.localidade,
-            estado: data.uf
-          }
+            estado: data.uf,
+          },
         });
       }
     } catch (error) {
-      console.error('Error fetching endereco:', error);
+      console.error("Error fetching endereco:", error);
     }
   };
 
   return (
     <Box
       title="Informações de entrega"
-      titleProps={{ variant: 'subtitle1', fontFamily: 'inter' }}
+      titleProps={{ variant: "subtitle1", fontFamily: "inter" }}
     >
       <RadioGroup
         row
         value={detalhesEnvio.tipo}
-        onChange={(e) => setDetalhesEnvio({ ...detalhesEnvio, tipo: Number(e.target.value) as TipoEnvio})}
+        onChange={(e) =>
+          setDetalhesEnvio({
+            ...detalhesEnvio,
+            tipo: Number(e.target.value) as TipoEnvio,
+          })
+        }
         sx={{
           gap: 4,
-          mb: 1
+          mb: 1,
         }}
       >
         <FormControlLabel value="1" control={<Radio />} label="Entrega" />
-        <FormControlLabel value="2" control={<Radio />} label="Retirada no local" />
+        <FormControlLabel
+          value="2"
+          control={<Radio />}
+          label="Retirada no local"
+        />
       </RadioGroup>
 
       {detalhesEnvio.tipo === TipoEnvio.Entrega && (
@@ -82,15 +92,15 @@ const DeliveryForm: React.FC = () => {
               InputProps={{
                 inputComponent: ReactInputMask as any,
                 inputProps: {
-                  mask: '99999-999',
+                  mask: "99999-999",
                   maskChar: null,
-                }
+                },
               }}
               onChange={onUpdateCep}
               sx={{
-                '& input': {
-                  letterSpacing: '1px'
-                }
+                "& input": {
+                  letterSpacing: "1px",
+                },
               }}
             />
           </Grid>
@@ -99,7 +109,7 @@ const DeliveryForm: React.FC = () => {
               fullWidth
               label="Rua"
               value={detalhesEnvio.endereco.rua}
-              onChange={(e) => updateEndereco('rua', e.target.value)}
+              onChange={(e) => updateEndereco("rua", e.target.value)}
             />
           </Grid>
           <Grid item xs={4}>
@@ -107,7 +117,7 @@ const DeliveryForm: React.FC = () => {
               fullWidth
               label="Número"
               value={detalhesEnvio.endereco.numero}
-              onChange={(e) => updateEndereco('numero', e.target.value)}
+              onChange={(e) => updateEndereco("numero", e.target.value)}
             />
           </Grid>
           <Grid item xs={8}>
@@ -115,7 +125,7 @@ const DeliveryForm: React.FC = () => {
               fullWidth
               label="Complemento"
               value={detalhesEnvio.endereco.complemento}
-              onChange={(e) => updateEndereco('complemento', e.target.value)}
+              onChange={(e) => updateEndereco("complemento", e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
@@ -123,7 +133,7 @@ const DeliveryForm: React.FC = () => {
               fullWidth
               label="Bairro"
               value={detalhesEnvio.endereco.bairro}
-              onChange={(e) => updateEndereco('bairro', e.target.value)}
+              onChange={(e) => updateEndereco("bairro", e.target.value)}
             />
           </Grid>
           <Grid item xs={8}>
@@ -131,23 +141,23 @@ const DeliveryForm: React.FC = () => {
               fullWidth
               label="Cidade"
               value={detalhesEnvio.endereco.cidade}
-              onChange={(e) => updateEndereco('cidade', e.target.value)}
+              onChange={(e) => updateEndereco("cidade", e.target.value)}
             />
           </Grid>
           <Grid item xs={4}>
             <Select
               fullWidth
               value={detalhesEnvio.endereco.estado}
-              onChange={(e) => updateEndereco('estado', e.target.value)}
+              onChange={(e) => updateEndereco("estado", e.target.value)}
               displayEmpty
               size="small"
               MenuProps={{
                 PaperProps: {
                   style: {
                     maxHeight: 240,
-                    overflow: 'auto'
-                  }
-                }
+                    overflow: "auto",
+                  },
+                },
               }}
             >
               <MenuItem value="" disabled>
