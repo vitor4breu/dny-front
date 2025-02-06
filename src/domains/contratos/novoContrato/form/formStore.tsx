@@ -48,49 +48,6 @@ const obterDefaultAluno = (detalhesPedido: DetalhesPedido): Aluno => ({
   caneca: detalhesPedido.possuiCaneca ? ({} as any) : undefined,
 });
 
-const defaultAlunosPedido: Aluno[] = [
-  {
-    nome: "ALUNO TESTE 1",
-    camisa: {
-      tamanho: 4,
-      modelagem: 1,
-      idCor: 7,
-      nomePersonalizado: "NOME PERSONALIZADO",
-    },
-    moletom: {
-      tamanho: 2,
-      modelagem: 1,
-      nomePersonalizado: "NOME PERSONALIZADO",
-      idCor: 1,
-      assinaturaCapuz: true,
-    },
-    caneca: {
-      tirante: true,
-      nomePersonalizado: "NOME PERSONALIZADO",
-    },
-  },
-  {
-    nome: "ALUNO TESTE 2",
-    camisa: {
-      tamanho: 1,
-      modelagem: 2,
-      idCor: 4,
-      nomePersonalizado: "NOME PERSONALIZADO 2",
-    },
-    moletom: {
-      tamanho: 1,
-      modelagem: 2,
-      nomePersonalizado: "NOME PERSONALIZADO DASDAS",
-      idCor: 5,
-      assinaturaCapuz: true,
-    },
-    caneca: {
-      tirante: true,
-      nomePersonalizado: "NOME PERSONALIZADO ADAS",
-    },
-  },
-];
-
 interface FormState {
   escolaInput: { escola: string; error?: string };
   setEscolaInput: (input: { escola: string; error?: string }) => void;
@@ -119,6 +76,9 @@ interface FormState {
 
   coresCamisa: Cor[];
   setCoresCamisa: (cores: Cor[]) => void;
+
+  coresCaneca: Cor[];
+  setCoresCaneca: (cores: Cor[]) => void;
 }
 
 const useFormStore = create<FormState>((set) => ({
@@ -183,6 +143,9 @@ const useFormStore = create<FormState>((set) => ({
 
   coresCamisa: [],
   setCoresCamisa: (cores) => set({ coresCamisa: cores }),
+
+  coresCaneca: [],
+  setCoresCaneca: (cores) => set({ coresCaneca: cores }),
 }));
 
 export default useFormStore;

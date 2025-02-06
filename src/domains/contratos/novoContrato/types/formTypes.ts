@@ -32,6 +32,7 @@ export interface IForm {
   corMoletom: string;
   possuiAssinaturaMoletom: boolean;
   possuiCaneca: boolean;
+  corCaneca: string;
   possuiTiranteCaneca: boolean;
   nomeAluno: string;
   nomePersonalizadoCamisa: string;
@@ -50,6 +51,7 @@ export const formInitalState: IForm = {
   corMoletom: "",
   possuiAssinaturaMoletom: false,
   possuiCaneca: false,
+  corCaneca: "",
   possuiTiranteCaneca: false,
   nomeAluno: "",
   nomePersonalizadoCamisa: "",

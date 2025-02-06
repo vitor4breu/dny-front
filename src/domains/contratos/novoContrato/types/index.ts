@@ -51,6 +51,7 @@ export interface Aluno {
     nomePersonalizado?: string;
   };
   caneca?: {
+    idCor: number;
     nomePersonalizado?: string;
     tirante: boolean;
   };
