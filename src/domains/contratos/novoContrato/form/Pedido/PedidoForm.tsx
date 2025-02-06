@@ -19,22 +19,20 @@ import { useShallow } from "zustand/react/shallow";
 import Box from "@components/@extended/Box";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import useFormStore from "../formStore";
-import useNewFormStore from "../newFormStore";
 import ContratosService from "services/contratoService";
-import { formInitalState } from "../../types/formTypes";
+import { formInitalState, IForm } from "../../types/formTypes";
 import { HOODIE_GENDER, UNIFORM_GENDER, UNIFORM_SIZES } from "@utils/consts";
+import { Aluno } from "../../types";
 
 interface IProps {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DetalhesPedidoForm = ({ setModal }: IProps) => {
-  const setDetalhesPedido = useFormStore((state) => state.setDetalhesPedido);
-  const detalhesPedido = useFormStore((state) => state.detalhesPedido);
   const coresCamisa = useFormStore((state) => state.coresCamisa);
   const coresMoletom = useFormStore((state) => state.coresMoletom);
 
-  const addAluno = useNewFormStore((state) => state.addAluno);
+  const addAluno = useFormStore((state) => state.addAluno);
 
   const setCoresMoletom = useFormStore(
     useShallow((state) => state.setCoresMoletom)
@@ -52,13 +50,76 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
     defaultValues: formInitalState,
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: IForm) => {
     console.log(data);
     if (data.nomeAluno.trim() === "") return;
 
-    addAluno({ nome: data.nomeAluno, sexo: data.sexo });
-    setModal(true);
+    const aluno: Aluno = {
+      nome: data.nomeAluno,
+      ...(data.possuiCamiseta && {
+        camisa: {
+          tamanho: +data.tamanhoCamiseta,
+          modelagem: +data.modeloCamiseta,
+          idCor: +data.corCamiseta,
+          nomePersonalizado: data.nomePersonalizadoCamisa,
+        },
+      }),
+      ...(data.possuiMoletom && {
+        moletom: {
+          tamanho: +data.tamanhoMoletom,
+          modelagem: +data.modeloMoletom,
+          idCor: +data.corMoletom, // Corrigi para `corMoletom` caso seja um erro de referência
+          assinaturaCapuz: data.possuiAssinaturaMoletom,
+          nomePersonalizado: data.nomePersonalizadoMoletom,
+        },
+      }),
+      ...(data.possuiCaneca && {
+        caneca: {
+          nomePersonalizado: data.nomePersonalizadoCaneca,
+          tirante: data.possuiTiranteCaneca,
+        },
+      }),
+    };
 
+    addAluno(aluno);
+
+    setValue("nomeAluno", "");
+  };
+
+  const onPersonalizar = (data: IForm) => {
+    console.log(data);
+    if (data.nomeAluno.trim() === "") return;
+
+    const aluno: Aluno = {
+      nome: data.nomeAluno,
+      ...(data.possuiCamiseta && {
+        camisa: {
+          tamanho: +data.tamanhoCamiseta,
+          modelagem: +data.modeloCamiseta,
+          idCor: +data.corCamiseta,
+          nomePersonalizado: data.nomePersonalizadoCamisa,
+        },
+      }),
+      ...(data.possuiMoletom && {
+        moletom: {
+          tamanho: +data.tamanhoMoletom,
+          modelagem: +data.modeloMoletom,
+          idCor: +data.corMoletom, // Corrigi para `corMoletom` caso seja um erro de referência
+          assinaturaCapuz: data.possuiAssinaturaMoletom,
+          nomePersonalizado: data.nomePersonalizadoMoletom,
+        },
+      }),
+      ...(data.possuiCaneca && {
+        caneca: {
+          nomePersonalizado: data.nomePersonalizadoCaneca,
+          tirante: data.possuiTiranteCaneca,
+        },
+      }),
+    };
+
+    addAluno(aluno);
+
+    setModal(true);
     setValue("nomeAluno", "");
   };
 
@@ -73,8 +134,7 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
       sx={{ mb: 2 }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-          {/* Coluna 1 - Camiseta */}
+        <Grid container spacing={2} sx={{ mt: 2, minHeight: "300px" }}>
           <Grid item md={12} lg={3.8}>
             <Typography variant="h6">
               Camiseta{" "}
@@ -85,7 +145,7 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
               <>
                 <FormControl fullWidth size="small" sx={{ mt: 2 }}>
                   <Select
-                    {...register("modeloCamiseta")} // Registro do campo
+                    {...register("modeloCamiseta")}
                     fullWidth
                     size="small"
                     defaultValue=""
@@ -154,7 +214,6 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
             )}
           </Grid>
 
-          {/* Divider */}
           <Grid item md={12} lg={0.2}>
             <Divider
               orientation="vertical"
@@ -162,7 +221,6 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
             />
           </Grid>
 
-          {/* Coluna 2 - Moletom */}
           <Grid item md={12} lg={3.8}>
             <Typography variant="h6">
               Moletom{" "}
@@ -251,7 +309,6 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
             )}
           </Grid>
 
-          {/* Divider */}
           <Grid item md={12} lg={0.2}>
             <Divider
               orientation="vertical"
@@ -259,7 +316,6 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
             />
           </Grid>
 
-          {/* Coluna 3 - Caneca */}
           <Grid item md={12} lg={3.8}>
             <Typography variant="h6">
               Caneca <ControlledSwitch name="possuiCaneca" control={control} />
@@ -273,7 +329,8 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
               />
             )}
           </Grid>
-
+        </Grid>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item md={12} lg={8}>
             <TextField
               label="Nome do Aluno"
@@ -301,7 +358,7 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
             <FormControl size="small" sx={{ mt: 2 }}>
               <Button
                 startIcon={<EditIcon />}
-                type="submit"
+                onClick={() => onPersonalizar(watch())}
                 size="small"
                 variant="contained"
                 color="primary"

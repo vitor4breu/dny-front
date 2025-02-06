@@ -108,6 +108,7 @@ interface FormState {
   updateEndereco: (field: keyof Endereco, value: string) => void;
 
   alunos: Aluno[];
+  addAluno: (aluno: Aluno) => void;
   setAlunos: (alunos: Aluno[]) => void;
   handleAddAluno: () => void;
   handleRemoveAluno: (index: number) => void;
@@ -159,8 +160,12 @@ const useFormStore = create<FormState>((set) => ({
       },
     })),
 
-  alunos: defaultAlunosPedido,
+  alunos: [],
   setAlunos: (alunos) => set({ alunos }),
+  addAluno: (aluno) =>
+    set((state) => ({
+      alunos: [...state.alunos, aluno],
+    })),
   handleAddAluno: () =>
     set((state) => ({
       alunos: [...state.alunos, obterDefaultAluno(state.detalhesPedido)],

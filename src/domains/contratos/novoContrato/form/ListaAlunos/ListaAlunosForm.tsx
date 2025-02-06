@@ -7,73 +7,157 @@ import {
   Card,
   CardHeader,
   Modal,
+  Stack,
+  Divider,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import useNewFormStore from "../newFormStore";
+import DeleteIcon from "@mui/icons-material/Delete";
 import DetalhesPedidoForm from "../Pedido/PedidoForm";
 import AlunoInput from "../Alunos/components/AlunoInput";
+import useFormStore from "../formStore";
+import { Aluno } from "../../types";
+import { UNIFORM_SIZES, UNIFORM_GENDER, HOODIE_GENDER } from "@utils/consts";
+
+const getLabel = (list: any, value: any) => {
+  const item = list.find((i: any) => i.value === value);
+  return item ? item.label : "Desconhecido";
+};
+
+const getColor = (list: any[], value: any) => {
+  const color = list.find((i: any) => i.id === value);
+  return color ? color.nome : "Desconhecido";
+};
 
 const ListaAlunosForm = () => {
-  const pedido = useNewFormStore((state) => state.pedido);
   const [modal, setModal] = useState(false);
+  const [selectedAlunoIndex, setSelectedAlunoIndex] = useState<number | null>(
+    null
+  );
 
   // Zustand store
-  const alunos = useNewFormStore((state) => state.alunos);
+  const alunos = useFormStore((state) => state.alunos);
+  const coresMoletom = useFormStore((state) => state.coresMoletom);
+  const coresCamisa = useFormStore((state) => state.coresCamisa);
+
+  const handleEdit = (index: number) => {
+    setSelectedAlunoIndex(index);
+    setModal(true);
+  };
 
   return (
     <>
       <DetalhesPedidoForm setModal={setModal} />
 
-      <Box
-        title={`Quantidade de Alunos: ${alunos.length}`}
-        titleProps={{ variant: "subtitle1", fontFamily: "inter" }}
-      >
-        {/* Tabela de alunos adicionados */}
-        <>
+      {alunos.length > 0 && (
+        <Box
+          title={`Quantidade de Alunos: ${alunos.length}`}
+          titleProps={{ variant: "subtitle1", fontFamily: "inter" }}
+        >
           <div
             style={{
               display: "grid",
-              gap: "16px",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gap: "24px",
+              gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
             }}
           >
-            {alunos.map((aluno) => (
-              <Card sx={{ position: "relative", p: 2 }}>
-                <CardHeader
-                  title={aluno.nome}
-                  subheader={`Sexo: ${aluno.sexo}`}
-                  action={
+            {alunos.map((aluno: Aluno, index: number) => (
+              <Card
+                key={index}
+                sx={{
+                  position: "relative",
+                  p: 3,
+                  display: "flex",
+                  flexDirection: "column",
+                  minHeight: 220,
+                }}
+              >
+                <CardHeader title={aluno.nome} sx={{ pb: 1 }} />
+                <CardContent
+                  sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
+                >
+                  <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
+                    <Divider />
+                    <Typography variant="body2">
+                      <strong>Camiseta:</strong>{" "}
+                      {aluno.camisa
+                        ? `${getLabel(
+                            UNIFORM_SIZES,
+                            aluno.camisa.tamanho
+                          )}, ${getLabel(
+                            UNIFORM_GENDER,
+                            aluno.camisa.modelagem
+                          )}, ${getColor(coresCamisa, aluno.camisa.idCor)} ${
+                            aluno.camisa.nomePersonalizado
+                              ? `(${aluno.camisa.nomePersonalizado})`
+                              : ""
+                          }`
+                        : "Não possui"}
+                    </Typography>
+                    <Divider />
+                    <Typography variant="body2">
+                      <strong>Moletom:</strong>{" "}
+                      {aluno.moletom
+                        ? `${getLabel(
+                            UNIFORM_SIZES,
+                            aluno.moletom.tamanho
+                          )}, ${getLabel(
+                            HOODIE_GENDER,
+                            aluno.moletom.modelagem
+                          )}, ${getColor(coresMoletom, aluno.moletom.idCor)} ${
+                            aluno.moletom.assinaturaCapuz
+                              ? "(com assinatura)"
+                              : ""
+                          } ${
+                            aluno.moletom.nomePersonalizado
+                              ? `(${aluno.moletom.nomePersonalizado})`
+                              : ""
+                          }`
+                        : "Não possui"}
+                    </Typography>
+                    <Divider />
+                    <Typography variant="body2">
+                      <strong>Caneca:</strong>{" "}
+                      {aluno.caneca
+                        ? `Sim ${aluno.caneca.tirante ? "(com tirante)" : ""} ${
+                            aluno.caneca.nomePersonalizado
+                              ? `(${aluno.caneca.nomePersonalizado})`
+                              : ""
+                          }`
+                        : "Não possui"}
+                    </Typography>
+                    <Divider />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    mt={2}
+                    justifyContent="center"
+                  >
                     <Button
                       size="small"
                       startIcon={<EditIcon />}
                       variant="contained"
                       color="primary"
-                      onClick={() => setModal(true)}
+                      onClick={() => handleEdit(index)}
                     >
                       Editar
                     </Button>
-                  }
-                />
-                <CardContent>
-                  <Typography variant="body2">
-                    Camiseta:{" "}
-                    {pedido.camisa.possui ? pedido.camisa.cor : "Não possui"}
-                  </Typography>
-                  <Typography variant="body2">
-                    Moletom:{" "}
-                    {pedido.moletom.possui ? pedido.moletom.cor : "Não possui"}
-                  </Typography>
-                  <Typography variant="body2">
-                    Caneca: {pedido.caneca.possui ? "Sim" : "Não"}{" "}
-                    {pedido.caneca.tirante ? "(com tirante)" : ""}
-                  </Typography>
-                  <Typography variant="body2">
-                    Bandeira: {pedido.bandeira.possui ? "Sim" : "Não"}
-                  </Typography>
+                    <Button
+                      size="small"
+                      startIcon={<DeleteIcon />}
+                      variant="contained"
+                      color="secondary"
+                      disabled
+                    >
+                      Remover
+                    </Button>
+                  </Stack>
                 </CardContent>
               </Card>
             ))}
           </div>
+
+          {/* Modal de edição */}
           <Modal open={modal} onClose={() => setModal(false)}>
             <Box
               sx={{
@@ -86,11 +170,16 @@ const ListaAlunosForm = () => {
                 borderRadius: 2,
               }}
             >
-              <AlunoInput key={1} index={1} />
+              {selectedAlunoIndex !== null && (
+                <AlunoInput
+                  key={selectedAlunoIndex}
+                  index={selectedAlunoIndex}
+                />
+              )}
             </Box>
           </Modal>
-        </>
-      </Box>
+        </Box>
+      )}
     </>
   );
 };

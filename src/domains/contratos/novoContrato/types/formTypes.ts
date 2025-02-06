@@ -21,7 +21,25 @@ export type PedidoForm = {
   };
 };
 
-export const formInitalState = {
+export interface IForm {
+  possuiCamiseta: boolean;
+  modeloCamiseta: string;
+  tamanhoCamiseta: string;
+  corCamiseta: string;
+  possuiMoletom: boolean;
+  modeloMoletom: string;
+  tamanhoMoletom: string;
+  corMoletom: string;
+  possuiAssinaturaMoletom: boolean;
+  possuiCaneca: boolean;
+  possuiTiranteCaneca: boolean;
+  nomeAluno: string;
+  nomePersonalizadoCamisa: string;
+  nomePersonalizadoMoletom: string;
+  nomePersonalizadoCaneca: string;
+}
+
+export const formInitalState: IForm = {
   possuiCamiseta: true,
   modeloCamiseta: "",
   tamanhoCamiseta: "",

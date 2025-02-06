@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import { Grid, FormControl, FormLabel, Select, MenuItem, TextField, Typography, Box as MuiBox, Switch, Tooltip, Button } from '@mui/material';
-import { Delete } from '@mui/icons-material';
-import { HOODIE_GENDER, UNIFORM_SIZES, HOODIE_COLORS } from '@utils/consts';
-import { Aluno } from 'domains/contratos/novoContrato/types';
-import useFormStore from '../../formStore';
+import React, { useState } from "react";
+import {
+  Grid,
+  FormControl,
+  FormLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Typography,
+  Box as MuiBox,
+  Switch,
+  Tooltip,
+  Button,
+} from "@mui/material";
+import { Delete } from "@mui/icons-material";
+import { HOODIE_GENDER, UNIFORM_SIZES } from "@utils/consts";
+import { Aluno } from "domains/contratos/novoContrato/types";
+import useFormStore from "../../formStore";
 
 interface MoletomInputProps {
   aluno: Aluno;
@@ -11,7 +23,9 @@ interface MoletomInputProps {
 }
 
 const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
-  const [nomePersonalizado, setNomePersonalizado] = useState<boolean>(!!aluno.moletom?.nomePersonalizado);
+  const [nomePersonalizado, setNomePersonalizado] = useState<boolean>(
+    !!aluno.moletom?.nomePersonalizado
+  );
 
   const updateAluno = useFormStore((state) => state.updateAluno);
   const detalhesPedido = useFormStore((state) => state.detalhesPedido);
@@ -20,10 +34,13 @@ const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
   const handleNomePersonalizadoToggle = () => {
     setNomePersonalizado(!nomePersonalizado);
     if (!nomePersonalizado) {
-      updateAluno(index, 'moletom', { ...aluno.moletom, nomePersonalizado: '' });
+      updateAluno(index, "moletom", {
+        ...aluno.moletom,
+        nomePersonalizado: "",
+      });
     } else {
       const { nomePersonalizado, ...rest } = aluno.moletom || {};
-      updateAluno(index, 'moletom', rest);
+      updateAluno(index, "moletom", rest);
     }
   };
 
@@ -31,16 +48,23 @@ const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
     <>
       <Grid item md={12} pt="4px !important">
         <MuiBox display="flex" justifyContent="space-between">
-          <Typography variant="subtitle1" fontWeight={"bold"} display={'inline'}> Moletom</Typography>
-          
+          <Typography
+            variant="subtitle1"
+            fontWeight={"bold"}
+            display={"inline"}
+          >
+            {" "}
+            Moletom
+          </Typography>
+
           <Button
             startIcon={<Delete />}
-            onClick={() => updateAluno(index, 'moletom', undefined)}
+            onClick={() => updateAluno(index, "moletom", undefined)}
             sx={{
-              fontWeight: 'bold',
-              letterSpacing: '0.02857em',
-              color: '#f35955',
-              paddingBottom: 0
+              fontWeight: "bold",
+              letterSpacing: "0.02857em",
+              color: "#f35955",
+              paddingBottom: 0,
             }}
             size="small"
           >
@@ -56,8 +80,13 @@ const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
           <Select
             fullWidth
             size="small"
-            value={aluno.moletom?.modelagem || ''}
-            onChange={(e) => updateAluno(index, 'moletom', { ...aluno.moletom, modelagem: e.target.value })}
+            value={aluno.moletom?.modelagem || ""}
+            onChange={(e) =>
+              updateAluno(index, "moletom", {
+                ...aluno.moletom,
+                modelagem: e.target.value,
+              })
+            }
             displayEmpty
           >
             <MenuItem value="" disabled>
@@ -79,8 +108,13 @@ const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
           <Select
             fullWidth
             size="small"
-            value={aluno.moletom?.tamanho || ''}
-            onChange={(e) => updateAluno(index, 'moletom', { ...aluno.moletom, tamanho: e.target.value })}
+            value={aluno.moletom?.tamanho || ""}
+            onChange={(e) =>
+              updateAluno(index, "moletom", {
+                ...aluno.moletom,
+                tamanho: e.target.value,
+              })
+            }
             displayEmpty
           >
             <MenuItem value="" disabled>
@@ -102,21 +136,30 @@ const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
           <Select
             fullWidth
             size="small"
-            value={aluno.moletom?.idCor || ''}
-            onChange={(e) => updateAluno(index, 'moletom', { ...aluno.moletom, cor: e.target.value })}
+            value={aluno.moletom?.idCor || ""}
+            onChange={(e) =>
+              updateAluno(index, "moletom", {
+                ...aluno.moletom,
+                cor: e.target.value,
+              })
+            }
             displayEmpty
           >
             <MenuItem value="" disabled>
               <em>Selecione a cor</em>
             </MenuItem>
             {coresMoletom.map((color) => (
-              <MenuItem key={color.id} value={color.id} sx={{ display: 'flex', alignItems: 'center' }}>
+              <MenuItem
+                key={color.id}
+                value={color.id}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
                 <MuiBox
                   sx={{
-                    display: 'inline-block',
+                    display: "inline-block",
                     width: 16,
                     height: 16,
-                    borderRadius: '50%',
+                    borderRadius: "50%",
                     backgroundColor: color.hex,
                     marginRight: 1,
                   }}
@@ -127,40 +170,57 @@ const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
           </Select>
         </FormControl>
       </Grid>
-      { detalhesPedido.possuiAssinaturaCapuzMoletom && (
+      {detalhesPedido.possuiAssinaturaCapuzMoletom && (
         <Grid item xs={12} md="auto">
-            <FormControl fullWidth>
-            <FormLabel  sx={{ margin: "auto" }}>
-                <Typography variant="subtitle2">Assinaturas Capuz</Typography>
+          <FormControl fullWidth>
+            <FormLabel sx={{ margin: "auto" }}>
+              <Typography variant="subtitle2">Assinaturas Capuz</Typography>
             </FormLabel>
-            <Tooltip title={aluno.moletom?.assinaturaCapuz ? "Remover assinatura capuz" : "Adicionar assinatura capuz"}>
-                <Switch
+            <Tooltip
+              title={
+                aluno.moletom?.assinaturaCapuz
+                  ? "Remover assinatura capuz"
+                  : "Adicionar assinatura capuz"
+              }
+            >
+              <Switch
                 sx={{ margin: "auto" }}
                 checked={aluno.moletom?.assinaturaCapuz}
-                onChange={e => updateAluno(index, 'moletom', { ...aluno.moletom, assinaturaCapuz: e.target.checked })}
+                onChange={(e) =>
+                  updateAluno(index, "moletom", {
+                    ...aluno.moletom,
+                    assinaturaCapuz: e.target.checked,
+                  })
+                }
                 color="primary"
-                />
+              />
             </Tooltip>
-            </FormControl>
+          </FormControl>
         </Grid>
-        )}
-      { detalhesPedido.possuiNomePersonalizado && (
+      )}
+      {detalhesPedido.possuiNomePersonalizado && (
         <Grid item xs={12} md="auto">
-            <FormControl fullWidth>
-            <FormLabel  sx={{ margin: "auto" }}>
-                <Typography variant="subtitle2">Nome Personalizado</Typography>
+          <FormControl fullWidth>
+            <FormLabel sx={{ margin: "auto" }}>
+              <Typography variant="subtitle2">Nome Personalizado</Typography>
             </FormLabel>
-            <Tooltip title={nomePersonalizado ? "Remover nome personalizado" : "Adicionar nome personalizado"}>
-                <Switch
+            <Tooltip
+              title={
+                nomePersonalizado
+                  ? "Remover nome personalizado"
+                  : "Adicionar nome personalizado"
+              }
+            >
+              <Switch
                 sx={{ margin: "auto" }}
                 checked={nomePersonalizado}
                 onChange={handleNomePersonalizadoToggle}
                 color="primary"
-                />
+              />
             </Tooltip>
-            </FormControl>
+          </FormControl>
         </Grid>
-        )}
+      )}
       {detalhesPedido.possuiNomePersonalizado && nomePersonalizado && (
         <Grid item xs={12}>
           <FormControl fullWidth>
@@ -171,8 +231,13 @@ const MoletomInput: React.FC<MoletomInputProps> = ({ aluno, index }) => {
               fullWidth
               size="small"
               placeholder="Digite o nome personalizado"
-              value={aluno.moletom?.nomePersonalizado || ''}
-              onChange={(e) => updateAluno(index, 'moletom', { ...aluno.moletom, nomePersonalizado: e.target.value })}
+              value={aluno.moletom?.nomePersonalizado || ""}
+              onChange={(e) =>
+                updateAluno(index, "moletom", {
+                  ...aluno.moletom,
+                  nomePersonalizado: e.target.value,
+                })
+              }
             />
           </FormControl>
         </Grid>
