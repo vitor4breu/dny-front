@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Box from "@components/@extended/Box";
+
 import {
   Button,
   CardContent,
@@ -12,11 +12,13 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+import Box from "@components/@extended/Box";
+import { UNIFORM_SIZES, UNIFORM_GENDER, HOODIE_GENDER } from "@utils/consts";
 import DetalhesPedidoForm from "../Pedido/PedidoForm";
-import AlunoInput from "../Alunos/components/AlunoInput";
 import useFormStore from "../formStore";
 import { Aluno } from "../../types";
-import { UNIFORM_SIZES, UNIFORM_GENDER, HOODIE_GENDER } from "@utils/consts";
+import AlunoModal from "../Alunos/AlunoModal";
 
 const getLabel = (list: any, value: any) => {
   const item = list.find((i: any) => i.value === value);
@@ -30,23 +32,24 @@ const getColor = (list: any[], value: any) => {
 
 const ListaAlunosForm = () => {
   const [modal, setModal] = useState(false);
-  const [selectedAlunoIndex, setSelectedAlunoIndex] = useState<number | null>(
-    null
-  );
+
+  const openModal = () => setModal(true);
+  const closeModal = () => setModal(false);
 
   // Zustand store
   const alunos = useFormStore((state) => state.alunos);
   const coresMoletom = useFormStore((state) => state.coresMoletom);
   const coresCamisa = useFormStore((state) => state.coresCamisa);
+  const { setSelectedItem } = useFormStore();
 
-  const handleEdit = (index: number) => {
-    setSelectedAlunoIndex(index);
+  const handleEdit = (index: number, aluno: Aluno) => {
+    setSelectedItem(index, aluno);
     setModal(true);
   };
 
   return (
     <>
-      <DetalhesPedidoForm setModal={setModal} />
+      <DetalhesPedidoForm openModal={openModal} />
 
       {alunos.length > 0 && (
         <Box
@@ -138,7 +141,7 @@ const ListaAlunosForm = () => {
                       startIcon={<EditIcon />}
                       variant="contained"
                       color="primary"
-                      onClick={() => handleEdit(index)}
+                      onClick={() => handleEdit(index, aluno)}
                     >
                       Editar
                     </Button>
@@ -156,30 +159,23 @@ const ListaAlunosForm = () => {
               </Card>
             ))}
           </div>
-
-          {/* Modal de edição */}
-          <Modal open={modal} onClose={() => setModal(false)}>
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                bgcolor: "background.paper",
-                p: 4,
-                borderRadius: 2,
-              }}
-            >
-              {selectedAlunoIndex !== null && (
-                <AlunoInput
-                  key={selectedAlunoIndex}
-                  index={selectedAlunoIndex}
-                />
-              )}
-            </Box>
-          </Modal>
         </Box>
       )}
+      <Modal open={modal} onClose={() => setModal(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <AlunoModal closeModal={closeModal} />
+        </Box>
+      </Modal>
     </>
   );
 };

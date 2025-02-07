@@ -35,9 +35,12 @@ export interface IForm {
   corCaneca: string;
   possuiTiranteCaneca: boolean;
   nomeAluno: string;
-  nomePersonalizadoCamisa: string;
+  nomePersonalizadoCamiseta: string;
   nomePersonalizadoMoletom: string;
   nomePersonalizadoCaneca: string;
+  possuiNomePersonalizadoCamiseta: boolean;
+  possuiNomePersonalizadoMoletom: boolean;
+  possuiNomePersonalizadoCaneca: boolean;
 }
 
 export const formInitalState: IForm = {
@@ -54,7 +57,10 @@ export const formInitalState: IForm = {
   corCaneca: "",
   possuiTiranteCaneca: false,
   nomeAluno: "",
-  nomePersonalizadoCamisa: "",
+  nomePersonalizadoCamiseta: "",
   nomePersonalizadoMoletom: "",
   nomePersonalizadoCaneca: "",
+  possuiNomePersonalizadoCamiseta: false,
+  possuiNomePersonalizadoMoletom: false,
+  possuiNomePersonalizadoCaneca: false,
 };

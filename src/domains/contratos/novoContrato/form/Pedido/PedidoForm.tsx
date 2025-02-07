@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import {
   Box as MuiBox,
@@ -24,20 +24,26 @@ import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import useFormStore from "../formStore";
 import ContratosService from "services/contratoService";
 import { formInitalState, IForm } from "../../types/formTypes";
-import { HOODIE_GENDER, UNIFORM_GENDER, UNIFORM_SIZES } from "@utils/consts";
-import { Aluno } from "../../types";
+import {
+  HOODIE_GENDER,
+  NOT_EDIT,
+  UNIFORM_GENDER,
+  UNIFORM_SIZES,
+} from "@utils/consts";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { createAluno } from "@utils/helpers";
 
 interface IProps {
-  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  openModal: () => void;
 }
 
-const DetalhesPedidoForm = ({ setModal }: IProps) => {
+const DetalhesPedidoForm = ({ openModal }: IProps) => {
   const coresCamisa = useFormStore((state) => state.coresCamisa);
   const coresMoletom = useFormStore((state) => state.coresMoletom);
   const coresCaneca = useFormStore((state) => state.coresCaneca);
 
   const addAluno = useFormStore((state) => state.addAluno);
+  const setSelectedItem = useFormStore((state) => state.setSelectedItem);
 
   const setCoresMoletom = useFormStore(
     useShallow((state) => state.setCoresMoletom)
@@ -67,72 +73,14 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
     defaultValues: formInitalState,
   });
 
-  const onSubmit = (data: IForm) => {
-    const aluno: Aluno = {
-      nome: data.nomeAluno,
-      ...(data.possuiCamiseta && {
-        camisa: {
-          tamanho: +data.tamanhoCamiseta,
-          modelagem: +data.modeloCamiseta,
-          idCor: +data.corCamiseta,
-          nomePersonalizado: data.nomePersonalizadoCamisa,
-        },
-      }),
-      ...(data.possuiMoletom && {
-        moletom: {
-          tamanho: +data.tamanhoMoletom,
-          modelagem: +data.modeloMoletom,
-          idCor: +data.corMoletom, // Corrigi para `corMoletom` caso seja um erro de referência
-          assinaturaCapuz: data.possuiAssinaturaMoletom,
-          nomePersonalizado: data.nomePersonalizadoMoletom,
-        },
-      }),
-      ...(data.possuiCaneca && {
-        caneca: {
-          idCor: +data.corCaneca,
-          nomePersonalizado: data.nomePersonalizadoCaneca,
-          tirante: data.possuiTiranteCaneca,
-        },
-      }),
-    };
-
-    addAluno(aluno);
-
+  const onCreate = (data: IForm) => {
+    addAluno(createAluno(data));
     setValue("nomeAluno", "");
   };
 
-  const onPersonalizar = (data: IForm) => {
-    const aluno: Aluno = {
-      nome: data.nomeAluno,
-      ...(data.possuiCamiseta && {
-        camisa: {
-          tamanho: +data.tamanhoCamiseta,
-          modelagem: +data.modeloCamiseta,
-          idCor: +data.corCamiseta,
-          nomePersonalizado: data.nomePersonalizadoCamisa,
-        },
-      }),
-      ...(data.possuiMoletom && {
-        moletom: {
-          tamanho: +data.tamanhoMoletom,
-          modelagem: +data.modeloMoletom,
-          idCor: +data.corMoletom, // Corrigi para `corMoletom` caso seja um erro de referência
-          assinaturaCapuz: data.possuiAssinaturaMoletom,
-          nomePersonalizado: data.nomePersonalizadoMoletom,
-        },
-      }),
-      ...(data.possuiCaneca && {
-        caneca: {
-          idCor: +data.corCaneca,
-          nomePersonalizado: data.nomePersonalizadoCaneca,
-          tirante: data.possuiTiranteCaneca,
-        },
-      }),
-    };
-
-    addAluno(aluno);
-
-    setModal(true);
+  const onUpdate = (data: IForm) => {
+    openModal();
+    setSelectedItem(NOT_EDIT, createAluno(data));
     setValue("nomeAluno", "");
   };
 
@@ -148,7 +96,7 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onCreate)}>
           <Grid container spacing={2} sx={{ mt: 2, minHeight: "300px" }}>
             <Grid item md={12} lg={3.8}>
               <Typography variant="h6">
@@ -504,7 +452,7 @@ const DetalhesPedidoForm = ({ setModal }: IProps) => {
               <FormControl size="small" sx={{ mt: 2 }}>
                 <Button
                   startIcon={<EditIcon />}
-                  onClick={() => onPersonalizar(watch())}
+                  onClick={() => handleSubmit(onUpdate)()}
                   size="small"
                   variant="contained"
                   color="primary"

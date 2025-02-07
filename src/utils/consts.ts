@@ -49,3 +49,5 @@ export const HOODIE_GENDER = [
   { value: 1, label: "Masculino" },
   { value: 2, label: "Feminino" },
 ];
+
+export const NOT_EDIT: number = -1;

@@ -7,10 +7,11 @@ interface IProps {
   name: string;
   control: any;
   label?: string;
+  disabled?: boolean;
 }
 
 export const ControlledSwitch = React.memo(
-  ({ name, control, label }: IProps) => {
+  ({ name, control, label, disabled = false }: IProps) => {
     const { field } = useController({
       name,
       control,
@@ -30,7 +31,12 @@ export const ControlledSwitch = React.memo(
         sx={{ mt: 2 }}
       />
     ) : (
-      <Switch checked={field.value} onChange={field.onChange} color="primary" />
+      <Switch
+        checked={field.value}
+        onChange={field.onChange}
+        color="primary"
+        disabled={disabled}
+      />
     );
   }
 );

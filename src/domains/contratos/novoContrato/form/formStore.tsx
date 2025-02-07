@@ -41,6 +41,10 @@ const defaultDetalhesEnvioPedido: DetalhesEnvio = {
   },
 };
 
+const defaultAluno: Aluno = {
+  nome: "",
+};
+
 const obterDefaultAluno = (detalhesPedido: DetalhesPedido): Aluno => ({
   nome: "",
   camisa: detalhesPedido.possuiCamiseta ? ({} as any) : undefined,
@@ -69,7 +73,7 @@ interface FormState {
   setAlunos: (alunos: Aluno[]) => void;
   handleAddAluno: () => void;
   handleRemoveAluno: (index: number) => void;
-  updateAluno: (index: number, field: keyof Aluno, value: any) => void;
+  updateAluno: (index: number, aluno: Aluno) => void;
 
   coresMoletom: Cor[];
   setCoresMoletom: (cores: Cor[]) => void;
@@ -79,6 +83,9 @@ interface FormState {
 
   coresCaneca: Cor[];
   setCoresCaneca: (cores: Cor[]) => void;
+
+  selectedItem: [number, Aluno];
+  setSelectedItem: (id: number, aluno: Aluno) => void;
 }
 
 const useFormStore = create<FormState>((set) => ({
@@ -132,11 +139,9 @@ const useFormStore = create<FormState>((set) => ({
     })),
   handleRemoveAluno: (index) =>
     set((state) => ({ alunos: state.alunos.filter((_, i) => i !== index) })),
-  updateAluno: (index, field, value) =>
+  updateAluno: (index, newAluno) =>
     set((state) => ({
-      alunos: state.alunos.map((aluno, i) =>
-        i === index ? { ...aluno, [field]: value } : aluno
-      ),
+      alunos: state.alunos.map((aluno, i) => (i === index ? newAluno : aluno)),
     })),
   coresMoletom: [],
   setCoresMoletom: (cores) => set({ coresMoletom: cores }),
@@ -146,6 +151,10 @@ const useFormStore = create<FormState>((set) => ({
 
   coresCaneca: [],
   setCoresCaneca: (cores) => set({ coresCaneca: cores }),
+
+  selectedItem: [0, defaultAluno],
+  setSelectedItem: (id: number, aluno: Aluno) =>
+    set({ selectedItem: [id, aluno] }),
 }));
 
 export default useFormStore;

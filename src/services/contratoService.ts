@@ -192,7 +192,7 @@ const ObterCoresMoletom = async () => {
 };
 
 const ObterCoresCaneca = async () => {
-  const response = await api.get<CorReponse[]>("/pedido/cores-moletom");
+  const response = await api.get<CorReponse[]>("/pedido/cores-moletom"); // TODO: criar endpoint e atualizar
   return response.data;
 };
 
