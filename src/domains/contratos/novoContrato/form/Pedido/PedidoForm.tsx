@@ -23,7 +23,7 @@ import { useShallow } from "zustand/react/shallow";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import useFormStore from "../formStore";
 import ContratosService from "services/contratoService";
-import { formInitalState, IForm } from "../../types/formTypes";
+import { alunoFormInitalState, IAlunoForm } from "../../types/formTypes";
 import {
   HOODIE_GENDER,
   NOT_EDIT,
@@ -70,15 +70,15 @@ const DetalhesPedidoForm = ({ openModal }: IProps) => {
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: formInitalState,
+    defaultValues: alunoFormInitalState,
   });
 
-  const onCreate = (data: IForm) => {
+  const onCreate = (data: IAlunoForm) => {
     addAluno(createAluno(data));
     setValue("nomeAluno", "");
   };
 
-  const onUpdate = (data: IForm) => {
+  const onUpdate = (data: IAlunoForm) => {
     openModal();
     setSelectedItem(NOT_EDIT, createAluno(data));
     setValue("nomeAluno", "");

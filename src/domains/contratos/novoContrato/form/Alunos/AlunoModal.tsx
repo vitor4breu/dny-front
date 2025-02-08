@@ -27,7 +27,7 @@ import {
   UNIFORM_GENDER,
   UNIFORM_SIZES,
 } from "@utils/consts";
-import { IForm } from "../../types/formTypes";
+import { IAlunoForm } from "../../types/formTypes";
 
 interface IProps {
   closeModal: () => void;
@@ -53,7 +53,6 @@ const AlunoModal = ({ closeModal }: IProps) => {
   );
 
   const {
-    register,
     handleSubmit,
     setValue,
     watch,
@@ -92,7 +91,7 @@ const AlunoModal = ({ closeModal }: IProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [possuiNomePersonalizadoCaneca]);
 
-  const onSubmit = (data: IForm) => {
+  const onSubmit = (data: IAlunoForm) => {
     if (id === NOT_EDIT) {
       addAluno(createAluno(data));
     } else {
@@ -119,17 +118,34 @@ const AlunoModal = ({ closeModal }: IProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={1.5}>
           <Grid item xs={12}>
-            <TextField
-              label="Nome do Aluno"
-              variant="outlined"
+            <FormControl
               fullWidth
-              margin="normal"
+              size="small"
+              sx={{ mt: 2 }}
               error={!!errors.nomeAluno}
-              helperText={errors.nomeAluno?.message}
-              {...register("nomeAluno", {
-                required: "Nome do aluno é obrigatório",
-              })}
-            />
+            >
+              <FormLabel sx={{ mb: 0.5 }}>
+                <Typography variant="subtitle2">Nome do Aluno</Typography>
+              </FormLabel>
+              <Controller
+                name="nomeAluno"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: "Nome do aluno é obrigatório",
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.nomeAluno}
+                    helperText={errors.nomeAluno?.message}
+                  />
+                )}
+              />
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>
@@ -276,27 +292,40 @@ const AlunoModal = ({ closeModal }: IProps) => {
             </FormControl>
           </Grid>
 
-          <Grid item>
-            <ControlledSwitch
-              name="possuiNomePersonalizadoCamiseta"
-              control={control}
-              disabled={!possuiCamiseta}
-            />
-          </Grid>
           <Grid item xs>
-            <TextField
-              label="Nome Personalizado"
-              variant="outlined"
-              fullWidth
-              disabled={!possuiNomePersonalizadoCamiseta || !possuiCamiseta}
-              error={!!errors.nomePersonalizadoCamiseta}
-              helperText={errors.nomePersonalizadoCamiseta?.message}
-              {...register("nomePersonalizadoCamiseta", {
-                required: possuiNomePersonalizadoCamiseta
-                  ? "Se selecionado, nome personalizado é obrigatório"
-                  : false,
-              })}
-            />
+            <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+              <FormLabel sx={{ mb: 0.5 }}>
+                <Typography variant="subtitle2">
+                  Nome Personalizado{" "}
+                  <ControlledSwitch
+                    name="possuiNomePersonalizadoCamiseta"
+                    control={control}
+                    disabled={!possuiCamiseta}
+                  />
+                </Typography>
+              </FormLabel>
+              <Controller
+                name="nomePersonalizadoCamiseta"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: possuiNomePersonalizadoCamiseta
+                    ? "Se selecionado, nome personalizado é obrigatório"
+                    : false,
+                }}
+                disabled={!possuiNomePersonalizadoCamiseta || !possuiCamiseta}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.nomePersonalizadoCamiseta}
+                    helperText={errors.nomePersonalizadoCamiseta?.message}
+                  />
+                )}
+              />
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>
@@ -463,27 +492,40 @@ const AlunoModal = ({ closeModal }: IProps) => {
             </FormControl>
           </Grid>
 
-          <Grid item>
-            <ControlledSwitch
-              name="possuiNomePersonalizadoMoletom"
-              control={control}
-              disabled={!possuiMoletom}
-            />
-          </Grid>
           <Grid item xs>
-            <TextField
-              label="Nome Personalizado"
-              variant="outlined"
-              fullWidth
-              disabled={!possuiNomePersonalizadoMoletom || !possuiMoletom}
-              error={!!errors.nomePersonalizadoMoletom}
-              helperText={errors.nomePersonalizadoMoletom?.message}
-              {...register("nomePersonalizadoMoletom", {
-                required: possuiNomePersonalizadoMoletom
-                  ? "Se selecionado, nome personalizado é obrigatório"
-                  : false,
-              })}
-            />
+            <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+              <FormLabel sx={{ mb: 0.5 }}>
+                <Typography variant="subtitle2">
+                  Nome Personalizado{" "}
+                  <ControlledSwitch
+                    name="possuiNomePersonalizadoMoletom"
+                    control={control}
+                    disabled={!possuiMoletom}
+                  />
+                </Typography>
+              </FormLabel>
+              <Controller
+                name="nomePersonalizadoMoletom"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: possuiNomePersonalizadoMoletom
+                    ? "Se selecionado, nome personalizado é obrigatório"
+                    : false,
+                }}
+                disabled={!possuiNomePersonalizadoMoletom || !possuiMoletom}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.nomePersonalizadoMoletom}
+                    helperText={errors.nomePersonalizadoMoletom?.message}
+                  />
+                )}
+              />
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>
@@ -579,27 +621,40 @@ const AlunoModal = ({ closeModal }: IProps) => {
           </Grid>
           <Grid item xs={0} md={6} />
 
-          <Grid item>
-            <ControlledSwitch
-              name="possuiNomePersonalizadoCaneca"
-              control={control}
-              disabled={!possuiCaneca}
-            />
-          </Grid>
           <Grid item xs>
-            <TextField
-              label="Nome Personalizado"
-              variant="outlined"
-              fullWidth
-              disabled={!possuiNomePersonalizadoCaneca || !possuiCaneca}
-              error={!!errors.nomePersonalizadoCaneca}
-              helperText={errors.nomePersonalizadoCaneca?.message}
-              {...register("nomePersonalizadoCaneca", {
-                required: possuiNomePersonalizadoCaneca
-                  ? "Se selecionado, nome personalizado é obrigatório"
-                  : false,
-              })}
-            />
+            <FormControl fullWidth size="small" sx={{ mt: 2 }}>
+              <FormLabel sx={{ mb: 0.5 }}>
+                <Typography variant="subtitle2">
+                  Nome Personalizado{" "}
+                  <ControlledSwitch
+                    name="possuiNomePersonalizadoCaneca"
+                    control={control}
+                    disabled={!possuiCaneca}
+                  />
+                </Typography>
+              </FormLabel>
+              <Controller
+                name="nomePersonalizadoCaneca"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: possuiNomePersonalizadoCaneca
+                    ? "Se selecionado, nome personalizado é obrigatório"
+                    : false,
+                }}
+                disabled={!possuiNomePersonalizadoCaneca || !possuiCaneca}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.nomePersonalizadoCaneca}
+                    helperText={errors.nomePersonalizadoCaneca?.message}
+                  />
+                )}
+              />
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>

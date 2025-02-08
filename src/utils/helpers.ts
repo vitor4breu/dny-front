@@ -1,7 +1,7 @@
 import { Aluno } from "domains/contratos/novoContrato/types";
-import { IForm } from "domains/contratos/novoContrato/types/formTypes";
+import { IAlunoForm } from "domains/contratos/novoContrato/types/formTypes";
 
-export const createAluno = (data: IForm) => {
+export const createAluno = (data: IAlunoForm) => {
   const aluno: Aluno = {
     nome: data.nomeAluno,
     ...(data.possuiCamiseta && {
@@ -33,7 +33,7 @@ export const createAluno = (data: IForm) => {
   return aluno;
 };
 
-export const createFormFromAluno = (aluno: Aluno): IForm => {
+export const createFormFromAluno = (aluno: Aluno): IAlunoForm => {
   return {
     nomeAluno: aluno.nome,
     possuiCamiseta: !!aluno.camisa,

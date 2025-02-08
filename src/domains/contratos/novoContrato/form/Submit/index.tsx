@@ -145,25 +145,7 @@ const SubmitForm: React.FC = () => {
 
   return (
     <Box display="flex" justifyContent="flex-end">
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        disabled={formState.isSubmitting}
-        sx={{
-          fontWeight: "bold",
-          fontSize: "0.9rem",
-          padding: "8px 24px",
-        }}
-      >
-        {formState.isSubmitting
-          ? isEditMode
-            ? "Atualizando..."
-            : "Criando..."
-          : isEditMode
-          ? "Atualizar Contrato"
-          : "Criar Contrato"}
-      </Button>
+      <></>
     </Box>
   );
 };

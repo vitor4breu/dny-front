@@ -21,7 +21,7 @@ export type PedidoForm = {
   };
 };
 
-export interface IForm {
+export interface IAlunoForm {
   possuiCamiseta: boolean;
   modeloCamiseta: string;
   tamanhoCamiseta: string;
@@ -43,7 +43,7 @@ export interface IForm {
   possuiNomePersonalizadoCaneca: boolean;
 }
 
-export const formInitalState: IForm = {
+export const alunoFormInitalState: IAlunoForm = {
   possuiCamiseta: true,
   modeloCamiseta: "",
   tamanhoCamiseta: "",
@@ -63,4 +63,48 @@ export const formInitalState: IForm = {
   possuiNomePersonalizadoCamiseta: false,
   possuiNomePersonalizadoMoletom: false,
   possuiNomePersonalizadoCaneca: false,
+};
+
+export interface IPedidoForm {
+  nomeEscola: string;
+  nomeRep1: string;
+  sobrenomeRep1: string;
+  telefoneRep1: string;
+  principalRep1: boolean;
+  nomeRep2?: string;
+  sobrenomeRep2?: string;
+  telefoneRep2?: string;
+  principalRep2?: boolean;
+  possuiBandeira: boolean;
+  dataEntrega: string;
+  tipoEntrega: 1 | 2;
+  cep?: string;
+  rua?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+}
+
+export const pedidoFormInitalState: IPedidoForm = {
+  nomeEscola: "",
+  nomeRep1: "",
+  sobrenomeRep1: "",
+  telefoneRep1: "",
+  principalRep1: false,
+  nomeRep2: "",
+  sobrenomeRep2: "",
+  telefoneRep2: "",
+  principalRep2: false,
+  possuiBandeira: false,
+  dataEntrega: "",
+  tipoEntrega: 1,
+  cep: "",
+  rua: "",
+  numero: "",
+  complemento: "",
+  bairro: "",
+  cidade: "",
+  estado: "",
 };

@@ -1,10 +1,7 @@
-import CriarEditarContrato from "domains/contratos/novoContrato/CriarEditarContrato"
+import CriarEditarContrato from "domains/contratos/novoContrato/CriarEditarContrato";
 
 const NovoContrato = () => {
-    console.log("rerender NovoContrato")
-    return (
-        <CriarEditarContrato />
-    )
-}
+  return <CriarEditarContrato />;
+};
 
 export default NovoContrato;
