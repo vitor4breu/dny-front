@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Grid } from "@mui/material";
 import { Box, Stepper, Step, StepButton } from "@mui/material";
@@ -10,29 +10,19 @@ import AlunosCard from "./form/AlunosCard";
 
 const CriarEditarContrato = () => {
   const navigate = useNavigate();
-  const { pedidoId } = useParams<{ pedidoId: string }>(); // Pegando o ID da URL
+  const { pedidoId } = useParams<{ pedidoId: string }>();
   const [activeStep, setActiveStep] = useState(0);
-  const [pedidoID, setPedidoID] = useState<string | null>(pedidoId || null);
   const steps = ["Detalhes Pedido", "Alunos"];
 
-  useEffect(() => {
-    if (pedidoId) {
-      setPedidoID(pedidoId); // Atualiza o estado se vier um ID na URL
-    }
-  }, [pedidoId]);
-
   const handleStep = (step: number) => () => {
-    // Impede navegação para "Alunos" sem um pedidoID válido
-    if (step === 1 && !pedidoID) {
+    if (step === 1 && !pedidoId) {
       return;
     }
     setActiveStep(step);
   };
 
   const handlePedidoSalvo = (id: string) => {
-    //TODO: if se cria ou atualiza
-    setPedidoID(id);
-    navigate(`${id}`); // Atualiza a URL com o ID
+    navigate(`${id}`);
     setActiveStep(1);
   };
 
@@ -61,9 +51,12 @@ const CriarEditarContrato = () => {
 
           <div>
             {activeStep === 0 && (
-              <PedidosForm onPedidoSalvo={handlePedidoSalvo} />
+              <PedidosForm
+                onPedidoSalvo={handlePedidoSalvo}
+                pedidoId={pedidoId}
+              />
             )}
-            {activeStep === 1 && <AlunosCard pedidoId={pedidoID} />}
+            {activeStep === 1 && <AlunosCard pedidoId={pedidoId} />}
           </div>
         </Box>
       </Grid>

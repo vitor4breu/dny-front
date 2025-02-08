@@ -21,7 +21,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
 
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
-import useFormStore from "./formStore";
+import useFormStore from "../helpers/formStore";
 import ContratosService from "services/contratoService";
 import { alunoFormInitalState, IAlunoForm } from "../helpers/formTypes";
 import {

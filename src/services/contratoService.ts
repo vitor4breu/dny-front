@@ -84,47 +84,16 @@ const CriarContrato = async (data: ContractRequest): Promise<number> => {
   }
 };
 
-const ObterInformacoesContrato = async (id: number): Promise<any> => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  const contrato = contratos.find((c) => c.id === id);
-  if (!contrato) throw new Error("Contrato não encontrado");
-
-  return {
-    ...contrato,
-    representantes: [
-      { nome: "Mock", sobrenome: "User", telefone: "999999999" },
-    ],
-    detalhesPedido: {
-      possuiCamiseta: true,
-      possuiMoletom: false,
-      possuiCaneca: true,
-      possuiTirante: false,
-      possuiNomePersonalizado: true,
-      possuiAssinaturaCapuzMoletom: false,
-      possuiBandeira: true,
-    },
-    detalhesEnvio: {
-      type: "entrega",
-      endereco: {
-        cep: "12345-678",
-        rua: "Rua Teste",
-        number: "123",
-        complemento: "Apto 1",
-        bairro: "Centro",
-        cidade: contrato.cidade,
-        state: contrato.uf,
-      },
-    },
-    alunos: [
-      {
-        name: "Aluno Teste",
-        tamanhoCamiseta: "M",
-        tipoCamiseta: "masculino",
-        nomePersonalizado: "Nome na camisa",
-      },
-    ],
-  };
+const ObterInformacoesContrato = async (
+  id: number
+): Promise<ContractRequest> => {
+  try {
+    const response = await api.get<ContractRequest>(`/pedido/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new ContractApiError("errrrrrrou");
+  }
 };
 
 export type ObterContratosQuery = {

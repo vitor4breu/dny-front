@@ -20,7 +20,7 @@ import { Controller, useForm } from "react-hook-form";
 import Box from "@components/@extended/Box";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import { createAluno, createFormFromAluno } from "@utils/helpers";
-import useFormStore from "./formStore";
+import useFormStore from "../helpers/formStore";
 import {
   HOODIE_GENDER,
   NOT_EDIT,

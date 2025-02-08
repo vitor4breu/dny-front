@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@components/@extended/Box";
 import { UNIFORM_SIZES, UNIFORM_GENDER, HOODIE_GENDER } from "@utils/consts";
 import PreenchimentoRapidoAluno from "./PreenchimentoRapidoAluno";
-import useFormStore from "./formStore";
+import useFormStore from "../helpers/formStore";
 import { Aluno } from "../helpers";
 import EditarAlunoModal from "./EditarAlunoModal";
 
@@ -31,7 +31,7 @@ const getColor = (list: any[], value: any) => {
 };
 
 interface IProps {
-  pedidoId: string | null;
+  pedidoId: string | undefined;
 }
 
 const AlunosCard = ({ pedidoId }: IProps) => {

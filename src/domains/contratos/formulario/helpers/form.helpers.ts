@@ -24,7 +24,7 @@ export const mapPedidoFormToApi = (form: IPedidoForm): ContractRequest => {
     possuiBandeira: form.possuiBandeira,
     escola: form.nomeEscola,
     detalhesEnvio: {
-      tipoEnvio: form.tipoEntrega, // Assumindo que tipoEntrega corresponde ao enum EPedidoTipoEnvio
+      tipoEnvio: form.tipoEntrega,
       cep: form.cep || undefined,
       rua: form.rua || undefined,
       numero: form.numero || undefined,
@@ -35,5 +35,35 @@ export const mapPedidoFormToApi = (form: IPedidoForm): ContractRequest => {
     },
     representantes,
     dataEntrega: new Date(form.dataEntrega),
+  };
+};
+
+export const mapApiToPedidoForm = (contract: ContractRequest): IPedidoForm => {
+  const representante1 = contract.representantes[0] || {};
+  const representante2 = contract.representantes[1] || {};
+
+  return {
+    nomeEscola: contract.escola,
+    possuiBandeira: contract.possuiBandeira,
+    tipoEntrega: contract.detalhesEnvio.tipoEnvio,
+    dataEntrega: contract.dataEntrega.toString(),
+
+    nomeRep1: representante1.nome || "",
+    sobrenomeRep1: representante1.sobrenome || "",
+    telefoneRep1: representante1.telefone || "",
+    principalRep1: representante1.principal || false,
+
+    nomeRep2: representante2.nome || undefined,
+    sobrenomeRep2: representante2.sobrenome || "",
+    telefoneRep2: representante2.telefone || "",
+    principalRep2: representante2.principal || false,
+
+    cep: contract.detalhesEnvio.cep || undefined,
+    rua: contract.detalhesEnvio.rua || undefined,
+    numero: contract.detalhesEnvio.numero || undefined,
+    bairro: contract.detalhesEnvio.bairro || undefined,
+    cidade: contract.detalhesEnvio.cidade || undefined,
+    estado: contract.detalhesEnvio.estado || undefined,
+    complemento: contract.detalhesEnvio.complemento || undefined,
   };
 };

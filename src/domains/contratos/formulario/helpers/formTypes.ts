@@ -62,6 +62,7 @@ export interface IPedidoForm {
   bairro?: string;
   cidade?: string;
   estado?: string;
+  [key: string]: any;
 }
 
 export const pedidoFormInitalState: IPedidoForm = {

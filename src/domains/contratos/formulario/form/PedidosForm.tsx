@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@components/@extended/Box";
 import {
   Grid,
@@ -21,24 +21,36 @@ import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import ReactInputMask from "react-input-mask";
 
-import { IPedidoForm, pedidoFormInitalState } from "../helpers/formTypes";
+import { IPedidoForm } from "../helpers/formTypes";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import { UF_LIST } from "@utils/consts";
 import ContratosService from "services/contratoService";
 import { mapPedidoFormToApi } from "../helpers/form.helpers";
+import { usePedido } from "../hooks/usePedidoForm";
 
 interface IProps {
   onPedidoSalvo: (id: string) => void;
+  pedidoId?: string;
 }
 
-const PedidosForm = ({ onPedidoSalvo }: IProps) => {
+const PedidosForm = ({ onPedidoSalvo, pedidoId }: IProps) => {
+  const { pedido, isLoading, error } = usePedido(pedidoId);
   const {
     handleSubmit,
     setValue,
     watch,
     control,
     formState: { errors },
-  } = useForm({ defaultValues: pedidoFormInitalState });
+  } = useForm({ defaultValues: pedido });
+
+  useEffect(() => {
+    if (pedido) {
+      // Aqui você pode garantir que os valores estão sendo preenchidos corretamente
+      Object.keys(pedido).forEach((key) => {
+        setValue(key, pedido[key]);
+      });
+    }
+  }, [pedido, setValue]);
 
   const onsubmit = async (data: IPedidoForm) => {
     console.log("criado pedido", data);
@@ -102,7 +114,6 @@ const PedidosForm = ({ onPedidoSalvo }: IProps) => {
                 <Controller
                   name="nomeEscola"
                   control={control}
-                  defaultValue=""
                   rules={{
                     required: "Nome da escola é obrigatório",
                   }}
