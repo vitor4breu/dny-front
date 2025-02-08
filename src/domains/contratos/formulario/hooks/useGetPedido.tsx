@@ -4,7 +4,7 @@ import ContratosService from "services/contratoService";
 import { useEffect } from "react";
 import { mapApiToPedidoForm } from "../helpers/form.helpers";
 
-export function usePedido(pedidoId?: string) {
+export function useGetPedido(pedidoId?: string) {
   const { pedido, setPedido } = useFormStore();
 
   const query = useQuery({

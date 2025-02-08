@@ -8,6 +8,7 @@ export const mapPedidoFormToApi = (form: IPedidoForm): ContractRequest => {
       sobrenome: form.sobrenomeRep1,
       telefone: form.telefoneRep1,
       principal: form.principalRep1,
+      id: form.idRep1,
     },
   ];
 
@@ -17,6 +18,7 @@ export const mapPedidoFormToApi = (form: IPedidoForm): ContractRequest => {
       sobrenome: form.sobrenomeRep2,
       telefone: form.telefoneRep2,
       principal: form.principalRep2,
+      id: form.idRep2,
     });
   }
 
@@ -52,11 +54,13 @@ export const mapApiToPedidoForm = (contract: ContractRequest): IPedidoForm => {
     sobrenomeRep1: representante1.sobrenome || "",
     telefoneRep1: representante1.telefone || "",
     principalRep1: representante1.principal || false,
+    idRep1: representante1.id,
 
     nomeRep2: representante2.nome || undefined,
     sobrenomeRep2: representante2.sobrenome || "",
     telefoneRep2: representante2.telefone || "",
     principalRep2: representante2.principal || false,
+    idRep2: representante1.id,
 
     cep: contract.detalhesEnvio.cep || undefined,
     rua: contract.detalhesEnvio.rua || undefined,

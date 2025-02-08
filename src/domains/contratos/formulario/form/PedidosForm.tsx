@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Box from "@components/@extended/Box";
 import {
   Grid,
@@ -24,9 +24,8 @@ import ReactInputMask from "react-input-mask";
 import { IPedidoForm } from "../helpers/formTypes";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import { UF_LIST } from "@utils/consts";
-import ContratosService from "services/contratoService";
-import { mapPedidoFormToApi } from "../helpers/form.helpers";
-import { usePedido } from "../hooks/usePedidoForm";
+import { useGetPedido } from "../hooks/useGetPedido";
+import { useSetPedido } from "../hooks/useSetPedido";
 
 interface IProps {
   onPedidoSalvo: (id: string) => void;
@@ -34,7 +33,8 @@ interface IProps {
 }
 
 const PedidosForm = ({ onPedidoSalvo, pedidoId }: IProps) => {
-  const { pedido, isLoading, error } = usePedido(pedidoId);
+  const { pedido } = useGetPedido(pedidoId);
+  const { setPedidoMutation } = useSetPedido(onPedidoSalvo, pedidoId);
   const {
     handleSubmit,
     setValue,
@@ -53,16 +53,7 @@ const PedidosForm = ({ onPedidoSalvo, pedidoId }: IProps) => {
   }, [pedido, setValue]);
 
   const onsubmit = async (data: IPedidoForm) => {
-    console.log("criado pedido", data);
-
-    try {
-      const response = await ContratosService.CriarContrato(
-        mapPedidoFormToApi(data)
-      );
-      onPedidoSalvo(response.toString());
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    setPedidoMutation(data);
   };
 
   const onUpdateCep = (e: any) => {
@@ -506,7 +497,8 @@ const PedidosForm = ({ onPedidoSalvo, pedidoId }: IProps) => {
             display: "block",
           }}
         >
-          Criar Contrato
+          {pedidoId ? "Editar " : "Criar "}
+          Contrato
         </Button>
       </form>
     </>

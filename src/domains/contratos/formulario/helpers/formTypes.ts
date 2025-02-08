@@ -44,10 +44,12 @@ export const alunoFormInitalState: IAlunoForm = {
 
 export interface IPedidoForm {
   nomeEscola: string;
+  idRep1: number;
   nomeRep1: string;
   sobrenomeRep1: string;
   telefoneRep1: string;
   principalRep1: boolean;
+  idRep2: number;
   nomeRep2?: string;
   sobrenomeRep2: string;
   telefoneRep2: string;
@@ -67,10 +69,12 @@ export interface IPedidoForm {
 
 export const pedidoFormInitalState: IPedidoForm = {
   nomeEscola: "",
+  idRep1: -1,
   nomeRep1: "",
   sobrenomeRep1: "",
   telefoneRep1: "",
   principalRep1: false,
+  idRep2: -1,
   nomeRep2: "",
   sobrenomeRep2: "",
   telefoneRep2: "",

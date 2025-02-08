@@ -29,6 +29,7 @@ export interface RepresentanteDto {
   sobrenome: string;
   telefone: string;
   principal: boolean;
+  id: number;
 }
 
 // Enum para EPedidoTipoEnvio
@@ -130,8 +131,37 @@ const ObterContratos = async ({ paginacao, ...q }: ObterContratosQuery) => {
 const AtualizarContrato = async (
   id: number,
   data: ContractRequest
-): Promise<number> => {
-  return new Promise<number>((resolve, reject) => {});
+): Promise<boolean> => {
+  try {
+    const response = await api.put<boolean>(`/pedido/${id}`, data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 400) {
+        // Use API error message directly
+        throw new ContractApiError(
+          error.response.data.message || "Dados inválidos para criar contrato",
+          400
+        );
+      }
+      if (error.response?.status === 401) {
+        throw new ContractApiError("Não autorizado", 401);
+      }
+      if (error.response?.status === 403) {
+        throw new ContractApiError("Sem permissão para criar contrato", 403);
+      }
+      if (error.response?.status === 500) {
+        throw new ContractApiError("Erro interno do servidor", 500);
+      }
+
+      throw new ContractApiError(
+        "Erro ao criar contrato",
+        error.response?.status
+      );
+    }
+
+    throw new ContractApiError("Erro desconhecido ao criar contrato");
+  }
 };
 
 export type CorReponse = {
