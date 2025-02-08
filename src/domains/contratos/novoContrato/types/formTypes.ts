@@ -72,9 +72,9 @@ export interface IPedidoForm {
   telefoneRep1: string;
   principalRep1: boolean;
   nomeRep2?: string;
-  sobrenomeRep2?: string;
-  telefoneRep2?: string;
-  principalRep2?: boolean;
+  sobrenomeRep2: string;
+  telefoneRep2: string;
+  principalRep2: boolean;
   possuiBandeira: boolean;
   dataEntrega: string;
   tipoEntrega: 1 | 2;

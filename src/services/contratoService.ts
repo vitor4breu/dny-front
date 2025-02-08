@@ -1,48 +1,40 @@
 import axios from "axios";
-import { ContratoModel } from "models/contrato/Contrato";
 import { Paginacao } from "types/extended";
 import contratosMock from "./mock";
-import { TipoEnvio } from "domains/contratos/novoContrato/types";
 import api from "@utils/api/apiConfig";
 
 const contratos = contratosMock;
 
 export interface ContractRequest {
-  escola: string; // Move to contract level
+  escola: string;
+  representantes: RepresentanteDto[];
   possuiBandeira: boolean;
-  representantes: {
-    nome: string;
-    sobrenome: string;
-    telefone: string;
-  }[];
-  detalhesEnvio: {
-    tipo: TipoEnvio;
-    endereco: {
-      cep: string;
-      rua: string;
-      numero: string;
-      complemento: string;
-      bairro: string;
-      cidade: string;
-      estado: string;
-    };
-  };
-  alunos: {
-    nome: string;
-    tamanhoCamiseta?: string;
-    tipoCamiseta?: string;
-    tamanhoMoletom?: string;
-    tipoMoletom?: string;
-    nomePersonalizado?: string;
-    possuiAssinaturaCapuzMoletom?: boolean;
-    possuiCaneca?: boolean;
-    possuiTirante?: boolean;
-  }[];
+  detalhesEnvio: EnvioDto;
+  dataEntrega: Date;
 }
 
-export interface ContractResponse extends ContratoModel {
-  createdAt: string;
-  status: string;
+export interface EnvioDto {
+  tipoEnvio: EPedidoTipoEnvio;
+  cep?: string;
+  rua?: string;
+  numero?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+  complemento?: string;
+}
+
+export interface RepresentanteDto {
+  nome: string;
+  sobrenome: string;
+  telefone: string;
+  principal: boolean;
+}
+
+// Enum para EPedidoTipoEnvio
+export enum EPedidoTipoEnvio {
+  RETIRADA = 1,
+  ENTREGA = 2,
 }
 
 export class ContractApiError extends Error {
@@ -59,11 +51,9 @@ export class ValidationError extends Error {
   }
 }
 
-const CriarContrato = async (
-  data: ContractRequest
-): Promise<ContractResponse> => {
+const CriarContrato = async (data: ContractRequest): Promise<number> => {
   try {
-    const response = await api.post<ContractResponse>("/pedido", data);
+    const response = await api.post<number>("/pedido", data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -171,8 +161,8 @@ const ObterContratos = async ({ paginacao, ...q }: ObterContratosQuery) => {
 const AtualizarContrato = async (
   id: number,
   data: ContractRequest
-): Promise<ContractResponse> => {
-  return new Promise<ContractResponse>((resolve, reject) => {});
+): Promise<number> => {
+  return new Promise<number>((resolve, reject) => {});
 };
 
 export type CorReponse = {

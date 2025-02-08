@@ -21,9 +21,11 @@ import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import ReactInputMask from "react-input-mask";
 
-import { pedidoFormInitalState } from "../../types/formTypes";
+import { IPedidoForm, pedidoFormInitalState } from "../../types/formTypes";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import { UF_LIST } from "@utils/consts";
+import ContratosService from "services/contratoService";
+import { mapPedidoFormToApi } from "./form.helpers";
 
 const RepresentanteForm: React.FC = () => {
   const {
@@ -34,8 +36,17 @@ const RepresentanteForm: React.FC = () => {
     formState: { errors },
   } = useForm({ defaultValues: pedidoFormInitalState });
 
-  const onsubmit = () => {
-    console.log("criado pedido");
+  const onsubmit = async (data: IPedidoForm) => {
+    console.log("criado pedido", data);
+
+    try {
+      const response = await ContratosService.CriarContrato(
+        mapPedidoFormToApi(data)
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const onUpdateCep = (e: any) => {

@@ -1,7 +1,6 @@
 import { Grid } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 
-import SubmitForm from "./form/Submit";
 import HorizontalNonLinearStepper from "./Stepper";
 
 const CriarEditarContrato = () => {
@@ -10,10 +9,6 @@ const CriarEditarContrato = () => {
       <ToastContainer />
       <Grid item xs={12}>
         <HorizontalNonLinearStepper />
-      </Grid>
-
-      <Grid item xs={12}>
-        <SubmitForm />
       </Grid>
     </Grid>
   );
