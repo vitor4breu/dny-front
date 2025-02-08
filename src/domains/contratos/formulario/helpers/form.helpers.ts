@@ -1,5 +1,5 @@
 import { ContractRequest } from "services/contratoService";
-import { IPedidoForm } from "../../types/formTypes";
+import { IPedidoForm } from "./formTypes";
 
 export const mapPedidoFormToApi = (form: IPedidoForm): ContractRequest => {
   const representantes = [

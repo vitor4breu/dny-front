@@ -20,20 +20,20 @@ import { Controller, useForm } from "react-hook-form";
 import Box from "@components/@extended/Box";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import { createAluno, createFormFromAluno } from "@utils/helpers";
-import useFormStore from "../formStore";
+import useFormStore from "./formStore";
 import {
   HOODIE_GENDER,
   NOT_EDIT,
   UNIFORM_GENDER,
   UNIFORM_SIZES,
 } from "@utils/consts";
-import { IAlunoForm } from "../../types/formTypes";
+import { IAlunoForm } from "../helpers/formTypes";
 
 interface IProps {
   closeModal: () => void;
 }
 
-const AlunoModal = ({ closeModal }: IProps) => {
+const EditarAlunoModal = ({ closeModal }: IProps) => {
   const {
     selectedItem: [id, aluno],
     coresCamisa,
@@ -678,4 +678,4 @@ const AlunoModal = ({ closeModal }: IProps) => {
   );
 };
 
-export default AlunoModal;
+export default EditarAlunoModal;

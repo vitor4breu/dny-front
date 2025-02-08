@@ -6,7 +6,7 @@ import {
   Endereco,
   Representante,
   TipoEnvio,
-} from "../types";
+} from "../helpers";
 import { create } from "zustand";
 
 const defaultRepresentantesPedido: Representante[] = [

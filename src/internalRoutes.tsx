@@ -1,27 +1,28 @@
-
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Contratos from './domains/contratos';
-import Canecas from './pages/Canecas';
-import Tirantes from './pages/Tirantes';
-import Corte from './pages/Corte';
-import FinalizacaoArte from './pages/FinalizacaoArte';
-import Bordado from './pages/Bordado';
-import Separacao from './pages/Separacao';
-import Serigrafia from './pages/Serigrafia';
-import Revisao from './pages/Revisao';
-import Costura from './pages/Costura';
-import Finalizacao from './pages/Finalizacao';
-import NovoContrato from 'pages/NovoContrato';
-import { ComponentUsingZustandStore } from 'domains/finalizacao/Teste';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Contratos from "./domains/contratos";
+import Canecas from "./pages/Canecas";
+import Tirantes from "./pages/Tirantes";
+import Corte from "./pages/Corte";
+import FinalizacaoArte from "./pages/FinalizacaoArte";
+import Bordado from "./pages/Bordado";
+import Separacao from "./pages/Separacao";
+import Serigrafia from "./pages/Serigrafia";
+import Revisao from "./pages/Revisao";
+import Costura from "./pages/Costura";
+import Finalizacao from "./pages/Finalizacao";
+import NovoContrato from "pages/NovoContrato";
+import { ComponentUsingZustandStore } from "domains/finalizacao/Teste";
 
 const InternalRoutes: React.FC = () => {
-  console.log("rerender internalRoutes")
+  console.log("rerender internalRoutes");
   return (
     <Routes>
       <Route path="/contratos" element={<Contratos />} />
-      <Route path="/contratos/novoContrato" element={<NovoContrato />} />
-      <Route path="/contratos/editar/:id" element={<NovoContrato />} />
+      <Route
+        path="/contratos/formulario/:pedidoId?"
+        element={<NovoContrato />}
+      />
       <Route path="/canecas" element={<ComponentUsingZustandStore />} />
       <Route path="/tirantes" element={<Tirantes />} />
       <Route path="/corte" element={<Corte />} />

@@ -21,9 +21,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
 
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
-import useFormStore from "../formStore";
+import useFormStore from "./formStore";
 import ContratosService from "services/contratoService";
-import { alunoFormInitalState, IAlunoForm } from "../../types/formTypes";
+import { alunoFormInitalState, IAlunoForm } from "../helpers/formTypes";
 import {
   HOODIE_GENDER,
   NOT_EDIT,
@@ -37,7 +37,7 @@ interface IProps {
   openModal: () => void;
 }
 
-const DetalhesPedidoForm = ({ openModal }: IProps) => {
+const PreenchimentoRapidoAluno = ({ openModal }: IProps) => {
   const coresCamisa = useFormStore((state) => state.coresCamisa);
   const coresMoletom = useFormStore((state) => state.coresMoletom);
   const coresCaneca = useFormStore((state) => state.coresCaneca);
@@ -468,4 +468,4 @@ const DetalhesPedidoForm = ({ openModal }: IProps) => {
   );
 };
 
-export default DetalhesPedidoForm;
+export default PreenchimentoRapidoAluno;

@@ -1,5 +1,5 @@
-import { Aluno } from "domains/contratos/novoContrato/types";
-import { IAlunoForm } from "domains/contratos/novoContrato/types/formTypes";
+import { Aluno } from "domains/contratos/formulario/helpers";
+import { IAlunoForm } from "domains/contratos/formulario/helpers/formTypes";
 
 export const createAluno = (data: IAlunoForm) => {
   const aluno: Aluno = {

@@ -21,13 +21,17 @@ import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import ReactInputMask from "react-input-mask";
 
-import { IPedidoForm, pedidoFormInitalState } from "../../types/formTypes";
+import { IPedidoForm, pedidoFormInitalState } from "../helpers/formTypes";
 import { ControlledSwitch } from "@components/@extended/ControlledSwitch";
 import { UF_LIST } from "@utils/consts";
 import ContratosService from "services/contratoService";
-import { mapPedidoFormToApi } from "./form.helpers";
+import { mapPedidoFormToApi } from "../helpers/form.helpers";
 
-const RepresentanteForm: React.FC = () => {
+interface IProps {
+  onPedidoSalvo: (id: string) => void;
+}
+
+const PedidosForm = ({ onPedidoSalvo }: IProps) => {
   const {
     handleSubmit,
     setValue,
@@ -43,7 +47,7 @@ const RepresentanteForm: React.FC = () => {
       const response = await ContratosService.CriarContrato(
         mapPedidoFormToApi(data)
       );
-      console.log(response);
+      onPedidoSalvo(response.toString());
     } catch (error) {
       console.error("Error:", error);
     }
@@ -498,4 +502,4 @@ const RepresentanteForm: React.FC = () => {
   );
 };
 
-export default RepresentanteForm;
+export default PedidosForm;

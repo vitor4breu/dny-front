@@ -15,10 +15,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import Box from "@components/@extended/Box";
 import { UNIFORM_SIZES, UNIFORM_GENDER, HOODIE_GENDER } from "@utils/consts";
-import DetalhesPedidoForm from "../Pedido/PedidoForm";
-import useFormStore from "../formStore";
-import { Aluno } from "../../types";
-import AlunoModal from "../Alunos/AlunoModal";
+import PreenchimentoRapidoAluno from "./PreenchimentoRapidoAluno";
+import useFormStore from "./formStore";
+import { Aluno } from "../helpers";
+import EditarAlunoModal from "./EditarAlunoModal";
 
 const getLabel = (list: any, value: any) => {
   const item = list.find((i: any) => i.value === value);
@@ -30,7 +30,11 @@ const getColor = (list: any[], value: any) => {
   return color ? color.nome : "Desconhecido";
 };
 
-const ListaAlunosForm = () => {
+interface IProps {
+  pedidoId: string | null;
+}
+
+const AlunosCard = ({ pedidoId }: IProps) => {
   const [modal, setModal] = useState(false);
 
   const openModal = () => setModal(true);
@@ -49,7 +53,7 @@ const ListaAlunosForm = () => {
 
   return (
     <>
-      <DetalhesPedidoForm openModal={openModal} />
+      <PreenchimentoRapidoAluno openModal={openModal} />
 
       {alunos.length > 0 && (
         <Box
@@ -173,11 +177,11 @@ const ListaAlunosForm = () => {
             borderRadius: 2,
           }}
         >
-          <AlunoModal closeModal={closeModal} />
+          <EditarAlunoModal closeModal={closeModal} />
         </Box>
       </Modal>
     </>
   );
 };
 
-export default ListaAlunosForm;
+export default AlunosCard;

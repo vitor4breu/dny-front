@@ -1,4 +1,4 @@
-import CriarEditarContrato from "domains/contratos/novoContrato/CriarEditarContrato";
+import CriarEditarContrato from "domains/contratos/formulario/CriarEditarContrato";
 
 const NovoContrato = () => {
   return <CriarEditarContrato />;
